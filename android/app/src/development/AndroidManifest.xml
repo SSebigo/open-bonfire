@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.killy.bonfire">
+  <application android:name="io.flutter.app.FlutterApplication" android:label="Bonfire" android:usesCleartextTraffic="true" android:icon="@mipmap/launcher_icon">
+    <meta-data android:name="com.mapbox.token" android:value="@string/mapbox_access_token_dev" />
+  </application>
+</manifest>

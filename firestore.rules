@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth.uid != null;
+    }//Allow creating a new user to anyone who is authenticated
+
+    match /users/{document=**} {
+     allow create: if isSignedIn();//Allow read if signed in
+     allow read: if isSignedIn();// Allow update only if the uid matches (same user)
+     allow update: if isSignedIn() && request.auth.uid == resource.data.uid;// Allow delete only if the uid matches (same user)
+     allow delete: if isSignedIn() && request.auth.uid == resource.data.uid;
+		}
+
+    match /username_uid_map/{document=**} {
+			allow create, read : if isSignedIn();  //Once a uid mapping is created it cannot be deleted or updated from the app
+		}
+
+		match /bonfires/{document=**} {
+      allow create, read, update, delete: if isSignedIn();
+    }
+
+    match /daily_quests/{document=**} {
+    	allow read: if isSignedIn();
+    }
+
+    match /penalties/{document=**} {
+    	allow read: if isSignedIn();
+    }
+
+    match /skins/{document=**} {
+    	allow read: if isSignedIn();
+    }
+
+    match /trophies/{document=**} {
+    	allow read: if isSignedIn();
+    }
+  }
+}

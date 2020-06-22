@@ -1,0 +1,3360 @@
+@startuml
+set namespaceSeparator ::
+
+class "bonfire::app.dart::App" {
+  +_AppState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::app.dart::App"
+
+class "bonfire::app.dart::_AppState" {
+  -LocalStorageRepository _localStorageRepository
+  -ThemeData _theme
+  +Widget build()
+}
+
+"bonfire::app.dart::_AppState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::app.dart::_AppState" o-- "flutter::src::material::theme_data.dart::ThemeData"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::app.dart::_AppState"
+
+class "bonfire::background_tasks.dart::BackgroundTask" {
+  -UserDataRepository _userDataRepository
+  -LocalStorageRepository _localStorageRepository
+  -DailyQuestRepository _dailyQuestRepository
+  -PenaltyRepository _penaltyRepository
+  +Future updateDailyQuestOrPenalty()
+  -Future _updateDailyQuest()
+  -Future _updatePenalty()
+}
+
+"bonfire::background_tasks.dart::BackgroundTask" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::background_tasks.dart::BackgroundTask" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::background_tasks.dart::BackgroundTask" o-- "bonfire::repositories::daily_quest_repository.dart::DailyQuestRepository"
+"bonfire::background_tasks.dart::BackgroundTask" o-- "bonfire::repositories::penalty_repository.dart::PenaltyRepository"
+
+class "bonfire::blocs::auth::auth_bloc.dart::AuthBloc" {
+  +Logger logger
+  -AuthenticationRepository _authenticationRepository
+  -UserDataRepository _userDataRepository
+  -LocalStorageRepository _localStorageRepository
+  -BackgroundTask _backgroundTask
+  +AuthState initialState
+  +Stream mapEventToState()
+  -Stream _mapOnSignInClickedToState()
+  -Stream _mapOnSignUpClickedToState()
+}
+
+"bonfire::blocs::auth::auth_bloc.dart::AuthBloc" o-- "logger::src::logger.dart::Logger"
+"bonfire::blocs::auth::auth_bloc.dart::AuthBloc" o-- "bonfire::repositories::authentication_repository.dart::AuthenticationRepository"
+"bonfire::blocs::auth::auth_bloc.dart::AuthBloc" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::blocs::auth::auth_bloc.dart::AuthBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::auth::auth_bloc.dart::AuthBloc" o-- "bonfire::background_tasks.dart::BackgroundTask"
+"bonfire::blocs::auth::auth_bloc.dart::AuthBloc" o-- "bonfire::blocs::auth::auth_state.dart::AuthState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::auth::auth_bloc.dart::AuthBloc"
+
+abstract class "bonfire::blocs::auth::auth_event.dart::AuthEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::auth::auth_event.dart::AuthEvent"
+
+class "bonfire::blocs::auth::auth_event.dart::OnAuthLaunched" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnAuthLaunched"
+
+class "bonfire::blocs::auth::auth_event.dart::OnEmailChanged" {
+  +String email
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnEmailChanged"
+
+class "bonfire::blocs::auth::auth_event.dart::OnPasswordChanged" {
+  +String password
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnPasswordChanged"
+
+class "bonfire::blocs::auth::auth_event.dart::OnConfirmPasswordChanged" {
+  +String password
+  +String confirmPassword
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnConfirmPasswordChanged"
+
+class "bonfire::blocs::auth::auth_event.dart::OnSignInAnonymouslyClicked" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnSignInAnonymouslyClicked"
+
+class "bonfire::blocs::auth::auth_event.dart::OnSignInClicked" {
+  +String email
+  +String password
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnSignInClicked"
+
+class "bonfire::blocs::auth::auth_event.dart::OnSignUpClicked" {
+  +String email
+  +String password
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnSignUpClicked"
+
+class "bonfire::blocs::auth::auth_event.dart::OnResetPasswordClicked" {
+  +String email
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnResetPasswordClicked"
+
+class "bonfire::blocs::auth::auth_event.dart::OnLogoutClicked" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_event.dart::AuthEvent" <|-- "bonfire::blocs::auth::auth_event.dart::OnLogoutClicked"
+
+abstract class "bonfire::blocs::auth::auth_state.dart::AuthState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::auth::auth_state.dart::AuthState"
+
+class "bonfire::blocs::auth::auth_state.dart::InitialAuthState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::InitialAuthState"
+
+class "bonfire::blocs::auth::auth_state.dart::NavigatingState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::NavigatingState"
+
+class "bonfire::blocs::auth::auth_state.dart::NavigateToMapState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::NavigateToMapState"
+
+class "bonfire::blocs::auth::auth_state.dart::NavigateToCompleteProfileState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::NavigateToCompleteProfileState"
+
+class "bonfire::blocs::auth::auth_state.dart::TextFieldChangedState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::TextFieldChangedState"
+
+class "bonfire::blocs::auth::auth_state.dart::EmailValidityState" {
+  +bool isEmailValid
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::EmailValidityState"
+
+class "bonfire::blocs::auth::auth_state.dart::PasswordValidityState" {
+  +bool isPasswordValid
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::PasswordValidityState"
+
+class "bonfire::blocs::auth::auth_state.dart::ConfirmPasswordValidityState" {
+  +bool isConfirmPasswordValid
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::ConfirmPasswordValidityState"
+
+class "bonfire::blocs::auth::auth_state.dart::SigningInAnonymously" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::SigningInAnonymously"
+
+class "bonfire::blocs::auth::auth_state.dart::SignedInAnonymously" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::SignedInAnonymously"
+
+class "bonfire::blocs::auth::auth_state.dart::LoggingInState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::LoggingInState"
+
+class "bonfire::blocs::auth::auth_state.dart::SendingMailState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::SendingMailState"
+
+class "bonfire::blocs::auth::auth_state.dart::SendMailSuccessState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::SendMailSuccessState"
+
+class "bonfire::blocs::auth::auth_state.dart::ConvertingAccountState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::ConvertingAccountState"
+
+class "bonfire::blocs::auth::auth_state.dart::AccountConvertedState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::AccountConvertedState"
+
+class "bonfire::blocs::auth::auth_state.dart::ResetLinkSentState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::ResetLinkSentState"
+
+class "bonfire::blocs::auth::auth_state.dart::LoggingOutState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::LoggingOutState"
+
+class "bonfire::blocs::auth::auth_state.dart::LoggedOutState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::LoggedOutState"
+
+class "bonfire::blocs::auth::auth_state.dart::AuthErrorState" {
+  +dynamic error
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::auth::auth_state.dart::AuthState" <|-- "bonfire::blocs::auth::auth_state.dart::AuthErrorState"
+
+class "bonfire::blocs::bonfire::bonfire_bloc.dart::BonfireBloc" {
+  -BonfireRepository _bonfireRepository
+  -UserDataRepository _userDataRepository
+  -LocalStorageRepository _localStorageRepository
+  +BonfireState initialState
+  +Stream mapEventToState()
+  -Stream _mapOnDownloadFileClickedToState()
+  -Stream _mapOnBonfireLikedToState()
+  -Stream _mapOnBonfireDislikedToState()
+  -Stream _mapOnFollowClickedToState()
+  -Stream _mapOnUnfollowClickedToState()
+}
+
+"bonfire::blocs::bonfire::bonfire_bloc.dart::BonfireBloc" o-- "bonfire::repositories::bonfire_repository.dart::BonfireRepository"
+"bonfire::blocs::bonfire::bonfire_bloc.dart::BonfireBloc" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::blocs::bonfire::bonfire_bloc.dart::BonfireBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::bonfire::bonfire_bloc.dart::BonfireBloc" o-- "bonfire::blocs::bonfire::bonfire_state.dart::BonfireState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::bonfire::bonfire_bloc.dart::BonfireBloc"
+
+abstract class "bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent"
+
+class "bonfire::blocs::bonfire::bonfire_event.dart::OnGoBackClicked" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::OnGoBackClicked"
+
+class "bonfire::blocs::bonfire::bonfire_event.dart::OnNavigateClickedEvent" {
+  +ImageBonfire bonfire
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_event.dart::OnNavigateClickedEvent" o-- "bonfire::models::bonfire.dart::ImageBonfire"
+"bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::OnNavigateClickedEvent"
+
+class "bonfire::blocs::bonfire::bonfire_event.dart::OnDownloadFileClickedEvent" {
+  +String fileUrl
+  +String errorMessage
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::OnDownloadFileClickedEvent"
+
+class "bonfire::blocs::bonfire::bonfire_event.dart::OnBonfireLiked" {
+  +String id
+  +String username
+  +List<String> likes
+  +List<String> dislikes
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::OnBonfireLiked"
+
+class "bonfire::blocs::bonfire::bonfire_event.dart::OnBonfireDisliked" {
+  +String id
+  +String username
+  +List<String> likes
+  +List<String> dislikes
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::OnBonfireDisliked"
+
+class "bonfire::blocs::bonfire::bonfire_event.dart::OnFollowClicked" {
+  +Follow following
+  +String errorMessage
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_event.dart::OnFollowClicked" o-- "bonfire::models::follow.dart::Follow"
+"bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::OnFollowClicked"
+
+class "bonfire::blocs::bonfire::bonfire_event.dart::OnUnfollowClicked" {
+  +Follow unfollowing
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_event.dart::OnUnfollowClicked" o-- "bonfire::models::follow.dart::Follow"
+"bonfire::blocs::bonfire::bonfire_event.dart::BonfireEvent" <|-- "bonfire::blocs::bonfire::bonfire_event.dart::OnUnfollowClicked"
+
+abstract class "bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::BonfireState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::InitialBonfireState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::InitialBonfireState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::GoingBackState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::GoingBackState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::GoBackState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::GoBackState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::NavigatingState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::NavigatingState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::NavigatedState" {
+  +Color color
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::NavigatedState" o-- "dart::ui::Color"
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::NavigatedState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::DownloadingFileState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::DownloadingFileState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::FileDownloadedState" {
+  +String savePath
+  +FileType fileType
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::FileDownloadedState" o-- "file_picker::file_picker.dart::FileType"
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::FileDownloadedState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::BonfireUpdatingState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::BonfireUpdatingState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::BonfireUpdatedState" {
+  +List<String> likes
+  +List<String> dislikes
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::BonfireUpdatedState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::AddingFollowingState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::AddingFollowingState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::FollowingAddedState" {
+  +bool isFollowing
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::FollowingAddedState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::RemovingFollowingState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::RemovingFollowingState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::FollowingRemovedState" {
+  +bool isFollowing
+  +List<Object> props
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::FollowingRemovedState"
+
+class "bonfire::blocs::bonfire::bonfire_state.dart::BonfireErrorState" {
+  +dynamic error
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::bonfire::bonfire_state.dart::BonfireState" <|-- "bonfire::blocs::bonfire::bonfire_state.dart::BonfireErrorState"
+
+class "bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc" {
+  -OnlineStorageRepository _onlineStorageRepository
+  -UserDataRepository _userDataRepository
+  -LocalStorageRepository _localStorageRepository
+  -DailyQuestRepository _dailyQuestRepository
+  -PenaltyRepository _penaltyRepository
+  +CompleteProfileState initialState
+  +Stream mapEventToState()
+  -Stream _mapOnSaveProfileClickedToState()
+}
+
+"bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc" o-- "bonfire::repositories::online_storage_repository.dart::OnlineStorageRepository"
+"bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc" o-- "bonfire::repositories::daily_quest_repository.dart::DailyQuestRepository"
+"bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc" o-- "bonfire::repositories::penalty_repository.dart::PenaltyRepository"
+"bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc" o-- "bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::complete_profile::complete_profile_bloc.dart::CompleteProfileBloc"
+
+abstract class "bonfire::blocs::complete_profile::complete_profile_event.dart::CompleteProfileEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::complete_profile::complete_profile_event.dart::CompleteProfileEvent"
+
+class "bonfire::blocs::complete_profile::complete_profile_event.dart::OnPhotoChanged" {
+  +String photoUrl
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::complete_profile::complete_profile_event.dart::CompleteProfileEvent" <|-- "bonfire::blocs::complete_profile::complete_profile_event.dart::OnPhotoChanged"
+
+class "bonfire::blocs::complete_profile::complete_profile_event.dart::OnUsernameChanged" {
+  +String username
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::complete_profile::complete_profile_event.dart::CompleteProfileEvent" <|-- "bonfire::blocs::complete_profile::complete_profile_event.dart::OnUsernameChanged"
+
+class "bonfire::blocs::complete_profile::complete_profile_event.dart::OnNameChanged" {
+  +String name
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::complete_profile::complete_profile_event.dart::CompleteProfileEvent" <|-- "bonfire::blocs::complete_profile::complete_profile_event.dart::OnNameChanged"
+
+class "bonfire::blocs::complete_profile::complete_profile_event.dart::OnSaveProfileClicked" {
+  +File pictureFile
+  +String username
+  +String name
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::complete_profile::complete_profile_event.dart::OnSaveProfileClicked" o-- "dart::io::File"
+"bonfire::blocs::complete_profile::complete_profile_event.dart::CompleteProfileEvent" <|-- "bonfire::blocs::complete_profile::complete_profile_event.dart::OnSaveProfileClicked"
+
+abstract class "bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState"
+
+class "bonfire::blocs::complete_profile::complete_profile_state.dart::InitialCompleteProfileState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::InitialCompleteProfileState"
+
+class "bonfire::blocs::complete_profile::complete_profile_state.dart::TextFieldChangedState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::TextFieldChangedState"
+
+class "bonfire::blocs::complete_profile::complete_profile_state.dart::UsernameValidityState" {
+  +bool isUsernameValid
+  +List<Object> props
+}
+
+"bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::UsernameValidityState"
+
+class "bonfire::blocs::complete_profile::complete_profile_state.dart::NameValidityState" {
+  +bool isNameValid
+  +List<Object> props
+}
+
+"bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::NameValidityState"
+
+class "bonfire::blocs::complete_profile::complete_profile_state.dart::SavingProfileState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::SavingProfileState"
+
+class "bonfire::blocs::complete_profile::complete_profile_state.dart::ProfileSavedState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::ProfileSavedState"
+
+class "bonfire::blocs::complete_profile::complete_profile_state.dart::SaveProfileFailedState" {
+  +dynamic error
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::complete_profile::complete_profile_state.dart::CompleteProfileState" <|-- "bonfire::blocs::complete_profile::complete_profile_state.dart::SaveProfileFailedState"
+
+class "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestBloc" {
+  +DailyQuestState initialState
+  +Stream mapEventToState()
+}
+
+"bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestBloc" o-- "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestBloc"
+
+abstract class "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestEvent"
+
+class "bonfire::blocs::daily_quest::daily_quest_bloc.dart::LaunchDailyQuest" {
+  +List<Object> props
+}
+
+"bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestEvent" <|-- "bonfire::blocs::daily_quest::daily_quest_bloc.dart::LaunchDailyQuest"
+
+abstract class "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestState"
+
+class "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestInitial" {
+  +List<Object> props
+}
+
+"bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestState" <|-- "bonfire::blocs::daily_quest::daily_quest_bloc.dart::DailyQuestInitial"
+
+class "bonfire::blocs::dark_mode::dark_mode_bloc.dart::DarkModeBloc" {
+  -LocalStorageRepository _localStorageRepository
+  +DarkModeState initialState
+  +Stream mapEventToState()
+}
+
+"bonfire::blocs::dark_mode::dark_mode_bloc.dart::DarkModeBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::dark_mode::dark_mode_bloc.dart::DarkModeBloc" o-- "bonfire::blocs::dark_mode::dark_mode_state.dart::DarkModeState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::dark_mode::dark_mode_bloc.dart::DarkModeBloc"
+
+abstract class "bonfire::blocs::dark_mode::dark_mode_event.dart::DarkModeEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::dark_mode::dark_mode_event.dart::DarkModeEvent"
+
+class "bonfire::blocs::dark_mode::dark_mode_event.dart::OnDarkModeToggled" {
+  +bool darkMode
+  +List<Object> props
+}
+
+"bonfire::blocs::dark_mode::dark_mode_event.dart::DarkModeEvent" <|-- "bonfire::blocs::dark_mode::dark_mode_event.dart::OnDarkModeToggled"
+
+abstract class "bonfire::blocs::dark_mode::dark_mode_state.dart::DarkModeState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::dark_mode::dark_mode_state.dart::DarkModeState"
+
+class "bonfire::blocs::dark_mode::dark_mode_state.dart::InitialDarkModeState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::dark_mode::dark_mode_state.dart::DarkModeState" <|-- "bonfire::blocs::dark_mode::dark_mode_state.dart::InitialDarkModeState"
+
+class "bonfire::blocs::dark_mode::dark_mode_state.dart::DarkModeChanged" {
+  +bool darkMode
+  +List<Object> props
+}
+
+"bonfire::blocs::dark_mode::dark_mode_state.dart::DarkModeState" <|-- "bonfire::blocs::dark_mode::dark_mode_state.dart::DarkModeChanged"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" {
+  +Geoflutterfire geo
+  -BonfireRepository _bonfireRepository
+  -OnlineStorageRepository _onlineStorageRepository
+  -LocalStorageRepository _localStorageRepository
+  -UserDataRepository _userDataRepository
+  -DailyQuestRepository _dailyQuestRepository
+  +LightBonfireState initialState
+  +Stream mapEventToState()
+  -Stream _mapOnLightBonfireFileToState()
+  -Stream _mapOnLightBonfireImageToState()
+  -Stream _mapOnLightBonfireTextToState()
+  -Stream _mapOnLightBonfireVideoToState()
+  -Stream _updateUserExperienceAndLevel()
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" o-- "geoflutterfire::src::geoflutterfire.dart::Geoflutterfire"
+"bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" o-- "bonfire::repositories::bonfire_repository.dart::BonfireRepository"
+"bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" o-- "bonfire::repositories::online_storage_repository.dart::OnlineStorageRepository"
+"bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" o-- "bonfire::repositories::daily_quest_repository.dart::DailyQuestRepository"
+"bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc" o-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::light_bonfire::light_bonfire_bloc.dart::LightBonfireBloc"
+
+abstract class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireTextClicked" {
+  +String text
+  +List<String> visibleBy
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireTextClicked"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireImageClicked" {
+  +File file
+  +FileType fileType
+  +String description
+  +List<String> visibleBy
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireImageClicked" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireImageClicked" o-- "file_picker::file_picker.dart::FileType"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireImageClicked"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireVideoClicked" {
+  +File file
+  +FileType fileType
+  +String description
+  +List<String> visibleBy
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireVideoClicked" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireVideoClicked" o-- "file_picker::file_picker.dart::FileType"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireVideoClicked"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireFileClicked" {
+  +File file
+  +FileType fileType
+  +String fileName
+  +String description
+  +List<String> visibleBy
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireFileClicked" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireFileClicked" o-- "file_picker::file_picker.dart::FileType"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnLightBonfireFileClicked"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnImagePicked" {
+  +File file
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnImagePicked" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnImagePicked"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnVideoPicked" {
+  +File file
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnVideoPicked" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnVideoPicked"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnFilePicked" {
+  +File file
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnFilePicked" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_event.dart::LightBonfireEvent" <|-- "bonfire::blocs::light_bonfire::light_bonfire_event.dart::OnFilePicked"
+
+abstract class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::InitialLightBonfireState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::InitialLightBonfireState"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayImagePreviewState" {
+  +File file
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayImagePreviewState" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayImagePreviewState"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayVideoPreviewState" {
+  +File file
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayVideoPreviewState" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayVideoPreviewState"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayFilePreviewState" {
+  +File file
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayFilePreviewState" o-- "dart::io::File"
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DisplayFilePreviewState"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightingBonfire" {
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightingBonfire"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::BonfireLit" {
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::BonfireLit"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DailyQuestCompleted" {
+  +List<Object> props
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::DailyQuestCompleted"
+
+class "bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireError" {
+  +dynamic error
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireState" <|-- "bonfire::blocs::light_bonfire::light_bonfire_state.dart::LightBonfireError"
+
+class "bonfire::blocs::map::map_bloc.dart::MapBloc" {
+  +Logger logger
+  +Geolocator geolocator
+  -LocationOptions _locationOptions
+  -StreamSubscription<Position> _positionStream
+  -StreamSubscription<List<Bonfire>> _bonfireSubscription
+  -BonfireRepository _bonfireRepository
+  -LocalStorageRepository _localStorageRepository
+  +MapState initialState
+  +Stream mapEventToState()
+  -Stream _mapFetchPositionToState()
+  -Stream _mapFetchBonfiresEventToState()
+  -Stream _mapReceivedBonfiresEventToState()
+  -Stream _mapOnLightBonfireEventToState()
+  -Stream _mapOnBonfireClickedEventToState()
+}
+
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "logger::src::logger.dart::Logger"
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "geolocator::geolocator.dart::Geolocator"
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "geolocator::geolocator.dart::LocationOptions"
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "dart::async::StreamSubscription<Position>"
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "dart::async::StreamSubscription<List<Bonfire>>"
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "bonfire::repositories::bonfire_repository.dart::BonfireRepository"
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::map::map_bloc.dart::MapBloc" o-- "bonfire::blocs::map::map_state.dart::MapState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::map::map_bloc.dart::MapBloc"
+
+abstract class "bonfire::blocs::map::map_event.dart::MapEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::map::map_event.dart::MapEvent"
+
+class "bonfire::blocs::map::map_event.dart::OnFetchPositionEvent" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_event.dart::MapEvent" <|-- "bonfire::blocs::map::map_event.dart::OnFetchPositionEvent"
+
+class "bonfire::blocs::map::map_event.dart::OnReceivedPositionEvent" {
+  +Position position
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_event.dart::OnReceivedPositionEvent" o-- "geolocator::geolocator.dart::Position"
+"bonfire::blocs::map::map_event.dart::MapEvent" <|-- "bonfire::blocs::map::map_event.dart::OnReceivedPositionEvent"
+
+class "bonfire::blocs::map::map_event.dart::OnFetchBonfiresEvent" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_event.dart::MapEvent" <|-- "bonfire::blocs::map::map_event.dart::OnFetchBonfiresEvent"
+
+class "bonfire::blocs::map::map_event.dart::OnReceivedBonfiresEvent" {
+  +List<Bonfire> bonfires
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_event.dart::MapEvent" <|-- "bonfire::blocs::map::map_event.dart::OnReceivedBonfiresEvent"
+
+class "bonfire::blocs::map::map_event.dart::OnLightBonfireClickedEvent" {
+  +int type
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_event.dart::MapEvent" <|-- "bonfire::blocs::map::map_event.dart::OnLightBonfireClickedEvent"
+
+class "bonfire::blocs::map::map_event.dart::OnBonfireClickedEvent" {
+  +Bonfire bonfire
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_event.dart::OnBonfireClickedEvent" o-- "bonfire::models::bonfire.dart::Bonfire"
+"bonfire::blocs::map::map_event.dart::MapEvent" <|-- "bonfire::blocs::map::map_event.dart::OnBonfireClickedEvent"
+
+abstract class "bonfire::blocs::map::map_state.dart::MapState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::map::map_state.dart::MapState"
+
+class "bonfire::blocs::map::map_state.dart::InitialMapState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::InitialMapState"
+
+class "bonfire::blocs::map::map_state.dart::NavigatingState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::NavigatingState"
+
+class "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireFileState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireFileState"
+
+class "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireImageState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireImageState"
+
+class "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireVideoState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireVideoState"
+
+class "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireTextState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::NavigationToLightBonfireTextState"
+
+class "bonfire::blocs::map::map_state.dart::FetchedPositionState" {
+  +Position position
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::FetchedPositionState" o-- "geolocator::geolocator.dart::Position"
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::FetchedPositionState"
+
+class "bonfire::blocs::map::map_state.dart::FetchingBonfiresState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::FetchingBonfiresState"
+
+class "bonfire::blocs::map::map_state.dart::FetchedBonfiresState" {
+  +List<Bonfire> bonfires
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::FetchedBonfiresState"
+
+class "bonfire::blocs::map::map_state.dart::SittingByTheFireState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::SittingByTheFireState"
+
+class "bonfire::blocs::map::map_state.dart::NavigateToBonfireState" {
+  +Bonfire bonfire
+  +List<Object> props
+}
+
+"bonfire::blocs::map::map_state.dart::NavigateToBonfireState" o-- "bonfire::models::bonfire.dart::Bonfire"
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::NavigateToBonfireState"
+
+class "bonfire::blocs::map::map_state.dart::MapErrorState" {
+  +dynamic error
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::map::map_state.dart::MapState" <|-- "bonfire::blocs::map::map_state.dart::MapErrorState"
+
+class "bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc" {
+  -OnlineStorageRepository _onlineStorageRepository
+  -UserDataRepository _userDataRepository
+  -LocalStorageRepository _localStorageRepository
+  -StreamSubscription<List<Bonfire>> _bonfireSubscription
+  -BonfireRepository _bonfireRepository
+  +MyProfileState initialState
+  +Stream mapEventToState()
+  -Stream _mapOnFetchUserBonfiresEventToState()
+  -Stream _mapOnReceivedUserBonfiresEventToState()
+  -Stream _mapOnUnfollowClickedToState()
+}
+
+"bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc" o-- "bonfire::repositories::online_storage_repository.dart::OnlineStorageRepository"
+"bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc" o-- "dart::async::StreamSubscription<List<Bonfire>>"
+"bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc" o-- "bonfire::repositories::bonfire_repository.dart::BonfireRepository"
+"bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc" o-- "bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::my_profile::my_profile_bloc.dart::MyProfileBloc"
+
+abstract class "bonfire::blocs::my_profile::my_profile_event.dart::MyProfileEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::my_profile::my_profile_event.dart::MyProfileEvent"
+
+class "bonfire::blocs::my_profile::my_profile_event.dart::OnGoBackClicked" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_event.dart::MyProfileEvent" <|-- "bonfire::blocs::my_profile::my_profile_event.dart::OnGoBackClicked"
+
+class "bonfire::blocs::my_profile::my_profile_event.dart::OnProfilePictureClicked" {
+  +File file
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_event.dart::OnProfilePictureClicked" o-- "dart::io::File"
+"bonfire::blocs::my_profile::my_profile_event.dart::MyProfileEvent" <|-- "bonfire::blocs::my_profile::my_profile_event.dart::OnProfilePictureClicked"
+
+class "bonfire::blocs::my_profile::my_profile_event.dart::OnFetchUserBonfiresEvent" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_event.dart::MyProfileEvent" <|-- "bonfire::blocs::my_profile::my_profile_event.dart::OnFetchUserBonfiresEvent"
+
+class "bonfire::blocs::my_profile::my_profile_event.dart::OnReceivedUserBonfiresEvent" {
+  +List<Bonfire> bonfires
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_event.dart::MyProfileEvent" <|-- "bonfire::blocs::my_profile::my_profile_event.dart::OnReceivedUserBonfiresEvent"
+
+class "bonfire::blocs::my_profile::my_profile_event.dart::OnUnfollowClicked" {
+  +Follow unfollowing
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_event.dart::OnUnfollowClicked" o-- "bonfire::models::follow.dart::Follow"
+"bonfire::blocs::my_profile::my_profile_event.dart::MyProfileEvent" <|-- "bonfire::blocs::my_profile::my_profile_event.dart::OnUnfollowClicked"
+
+abstract class "bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::InitialMyProfileState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::InitialMyProfileState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::GoingBackState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::GoingBackState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::GoBackState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::GoBackState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::UpdatingProfilePictureState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::UpdatingProfilePictureState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::ProfilePictureUpdatedState" {
+  +String profilePictureUrl
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::ProfilePictureUpdatedState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::FetchingUserBonfiresState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::FetchingUserBonfiresState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::FetchedUserBonfiresState" {
+  +List<Bonfire> bonfires
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::FetchedUserBonfiresState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::RemovingFollowingState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::RemovingFollowingState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::FollowingRemovedState" {
+  +List following
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::FollowingRemovedState"
+
+class "bonfire::blocs::my_profile::my_profile_state.dart::MyProfileErrorState" {
+  +dynamic error
+  +List<Object> props
+}
+
+"bonfire::blocs::my_profile::my_profile_state.dart::MyProfileState" <|-- "bonfire::blocs::my_profile::my_profile_state.dart::MyProfileErrorState"
+
+class "bonfire::blocs::settings::settings_bloc.dart::SettingsBloc" {
+  -AuthenticationRepository _authenticationRepository
+  -UserDataRepository _userDataRepository
+  -LocalStorageRepository _localStorageRepository
+  +SettingsState initialState
+  +Stream mapEventToState()
+  -Stream _mapOnModifyNameClickedToState()
+  -Stream _mapOnModifyEmailClickedToState()
+  -Stream _mapOnModifyPasswordClickedToState()
+  -Stream _mapOnReportProblemClickedToState()
+  -Stream _mapOnGiveFeedbackClickedToState()
+  -Stream _mapOnLogoutClickedToState()
+  -Map _readAndroidBuildData()
+  -Map _readIosDeviceInfo()
+}
+
+"bonfire::blocs::settings::settings_bloc.dart::SettingsBloc" o-- "bonfire::repositories::authentication_repository.dart::AuthenticationRepository"
+"bonfire::blocs::settings::settings_bloc.dart::SettingsBloc" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::blocs::settings::settings_bloc.dart::SettingsBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::settings::settings_bloc.dart::SettingsBloc" o-- "bonfire::blocs::settings::settings_state.dart::SettingsState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::settings::settings_bloc.dart::SettingsBloc"
+
+abstract class "bonfire::blocs::settings::settings_event.dart::SettingsEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::settings::settings_event.dart::SettingsEvent"
+
+class "bonfire::blocs::settings::settings_event.dart::OnModifyNameClicked" {
+  +String name
+  +String password
+  +String errorMessage
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnModifyNameClicked"
+
+class "bonfire::blocs::settings::settings_event.dart::OnModifyEmailClicked" {
+  +String email
+  +String password
+  +String errorMessage
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnModifyEmailClicked"
+
+class "bonfire::blocs::settings::settings_event.dart::OnModifyPasswordClicked" {
+  +String currentPassword
+  +String newPassword
+  +String newPasswordConfirmation
+  +String errorMessage
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnModifyPasswordClicked"
+
+class "bonfire::blocs::settings::settings_event.dart::OnNameChanged" {
+  +String name
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnNameChanged"
+
+class "bonfire::blocs::settings::settings_event.dart::OnEmailChanged" {
+  +String email
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnEmailChanged"
+
+class "bonfire::blocs::settings::settings_event.dart::OnPasswordChanged" {
+  +String password
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnPasswordChanged"
+
+class "bonfire::blocs::settings::settings_event.dart::OnReportProblemClicked" {
+  +String body
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnReportProblemClicked"
+
+class "bonfire::blocs::settings::settings_event.dart::OnGiveFeedbackClicked" {
+  +String body
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnGiveFeedbackClicked"
+
+class "bonfire::blocs::settings::settings_event.dart::OnLogoutClicked" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_event.dart::SettingsEvent" <|-- "bonfire::blocs::settings::settings_event.dart::OnLogoutClicked"
+
+abstract class "bonfire::blocs::settings::settings_state.dart::SettingsState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::settings::settings_state.dart::SettingsState"
+
+class "bonfire::blocs::settings::settings_state.dart::InitialSettingsState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::InitialSettingsState"
+
+class "bonfire::blocs::settings::settings_state.dart::ModifyingFieldState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::ModifyingFieldState"
+
+class "bonfire::blocs::settings::settings_state.dart::FieldModifiedState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::FieldModifiedState"
+
+class "bonfire::blocs::settings::settings_state.dart::LoggingOutState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::LoggingOutState"
+
+class "bonfire::blocs::settings::settings_state.dart::LoggedOutState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::LoggedOutState"
+
+class "bonfire::blocs::settings::settings_state.dart::TextFieldChangedState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::TextFieldChangedState"
+
+class "bonfire::blocs::settings::settings_state.dart::ReportingProblemState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::ReportingProblemState"
+
+class "bonfire::blocs::settings::settings_state.dart::ProblemReportedState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::ProblemReportedState"
+
+class "bonfire::blocs::settings::settings_state.dart::GivingFeedbackState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::GivingFeedbackState"
+
+class "bonfire::blocs::settings::settings_state.dart::FeedbackGivenState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::FeedbackGivenState"
+
+class "bonfire::blocs::settings::settings_state.dart::NameValidityState" {
+  +bool isNameValid
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::NameValidityState"
+
+class "bonfire::blocs::settings::settings_state.dart::EmailValidityState" {
+  +bool isEmailValid
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::EmailValidityState"
+
+class "bonfire::blocs::settings::settings_state.dart::PasswordValidityState" {
+  +bool isPasswordValid
+  +List<Object> props
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::PasswordValidityState"
+
+class "bonfire::blocs::settings::settings_state.dart::SettingsFailedState" {
+  +dynamic error
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::settings::settings_state.dart::SettingsState" <|-- "bonfire::blocs::settings::settings_state.dart::SettingsFailedState"
+
+class "bonfire::blocs::splash::splash_bloc.dart::SplashBloc" {
+  -PermissionHandler _permissionHandler
+  +Logger logger
+  -AuthenticationRepository _authenticationRepository
+  -UserDataRepository _userDataRepository
+  -LocalStorageRepository _localStorageRepository
+  -BackgroundTask _backgroundTask
+  +SplashState initialState
+  +Stream mapEventToState()
+  -Stream _mapOnResquestPermissionsToState()
+  -Stream _mapOnInitializeDownloadManagerToState()
+  -Stream _mapOnInitializeBackgroundTaskManagerToState()
+  -Stream _mapOnInitializeLocaleToState()
+  -Stream _mapOnAuthenticateToState()
+}
+
+"bonfire::blocs::splash::splash_bloc.dart::SplashBloc" o-- "permission_handler::src::permission_handler.dart::PermissionHandler"
+"bonfire::blocs::splash::splash_bloc.dart::SplashBloc" o-- "logger::src::logger.dart::Logger"
+"bonfire::blocs::splash::splash_bloc.dart::SplashBloc" o-- "bonfire::repositories::authentication_repository.dart::AuthenticationRepository"
+"bonfire::blocs::splash::splash_bloc.dart::SplashBloc" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+"bonfire::blocs::splash::splash_bloc.dart::SplashBloc" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::blocs::splash::splash_bloc.dart::SplashBloc" o-- "bonfire::background_tasks.dart::BackgroundTask"
+"bonfire::blocs::splash::splash_bloc.dart::SplashBloc" o-- "bonfire::blocs::splash::splash_state.dart::SplashState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::blocs::splash::splash_bloc.dart::SplashBloc"
+
+abstract class "bonfire::blocs::splash::splash_event.dart::SplashEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::splash::splash_event.dart::SplashEvent"
+
+class "bonfire::blocs::splash::splash_event.dart::OnSplashLaunched" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_event.dart::SplashEvent" <|-- "bonfire::blocs::splash::splash_event.dart::OnSplashLaunched"
+
+class "bonfire::blocs::splash::splash_event.dart::EVTOnRequestPermissions" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_event.dart::SplashEvent" <|-- "bonfire::blocs::splash::splash_event.dart::EVTOnRequestPermissions"
+
+class "bonfire::blocs::splash::splash_event.dart::EVTOnInitializeDownloadManager" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_event.dart::SplashEvent" <|-- "bonfire::blocs::splash::splash_event.dart::EVTOnInitializeDownloadManager"
+
+class "bonfire::blocs::splash::splash_event.dart::EVTOnInitializeBackgroundTaskManager" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_event.dart::SplashEvent" <|-- "bonfire::blocs::splash::splash_event.dart::EVTOnInitializeBackgroundTaskManager"
+
+class "bonfire::blocs::splash::splash_event.dart::EVTOnBackgroundTaskUpdateDailyQuestOrPenalty" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_event.dart::SplashEvent" <|-- "bonfire::blocs::splash::splash_event.dart::EVTOnBackgroundTaskUpdateDailyQuestOrPenalty"
+
+class "bonfire::blocs::splash::splash_event.dart::EVTOnInitializeLocale" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_event.dart::SplashEvent" <|-- "bonfire::blocs::splash::splash_event.dart::EVTOnInitializeLocale"
+
+class "bonfire::blocs::splash::splash_event.dart::EVTOnAuthenticate" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_event.dart::SplashEvent" <|-- "bonfire::blocs::splash::splash_event.dart::EVTOnAuthenticate"
+
+abstract class "bonfire::blocs::splash::splash_state.dart::SplashState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::blocs::splash::splash_state.dart::SplashState"
+
+class "bonfire::blocs::splash::splash_state.dart::InitialSplashState" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::InitialSplashState"
+
+class "bonfire::blocs::splash::splash_state.dart::STEPermissionsRequestPending" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEPermissionsRequestPending"
+
+class "bonfire::blocs::splash::splash_state.dart::STEPermissionsRequestDenied" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEPermissionsRequestDenied"
+
+class "bonfire::blocs::splash::splash_state.dart::STELocalStorageLoading" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STELocalStorageLoading"
+
+class "bonfire::blocs::splash::splash_state.dart::STENavigationToAnonymousSignIn" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STENavigationToAnonymousSignIn"
+
+class "bonfire::blocs::splash::splash_state.dart::STENavigationToMap" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STENavigationToMap"
+
+class "bonfire::blocs::splash::splash_state.dart::STENavigationToCompleteProfile" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STENavigationToCompleteProfile"
+
+class "bonfire::blocs::splash::splash_state.dart::STEInitializingDownloadManager" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEInitializingDownloadManager"
+
+class "bonfire::blocs::splash::splash_state.dart::STEDownloadManagerInitialized" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEDownloadManagerInitialized"
+
+class "bonfire::blocs::splash::splash_state.dart::STEInitializingBackgroundTaskManager" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEInitializingBackgroundTaskManager"
+
+class "bonfire::blocs::splash::splash_state.dart::STEBackgroundTaskManagerInitialized" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEBackgroundTaskManagerInitialized"
+
+class "bonfire::blocs::splash::splash_state.dart::STEBackgroundTaskUpdatingDailyQuestOrPenalty" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEBackgroundTaskUpdatingDailyQuestOrPenalty"
+
+class "bonfire::blocs::splash::splash_state.dart::STEBackgroundTaskDailyQuestOrPenaltyUpdated" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEBackgroundTaskDailyQuestOrPenaltyUpdated"
+
+class "bonfire::blocs::splash::splash_state.dart::STEInitializingLocale" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STEInitializingLocale"
+
+class "bonfire::blocs::splash::splash_state.dart::STELocaleInitialized" {
+  +List<Object> props
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STELocaleInitialized"
+
+class "bonfire::blocs::splash::splash_state.dart::STESplashError" {
+  +dynamic error
+  +List<Object> props
+  +String toString()
+}
+
+"bonfire::blocs::splash::splash_state.dart::SplashState" <|-- "bonfire::blocs::splash::splash_state.dart::STESplashError"
+
+class "bonfire::i18n.dart::I18n" {
+  {static} -Map<String, String> _localizedValues
+  {static} -Map<String, String> _enValues
+  {static} -Map<String, String> _frValues
+  {static} -Map<String, Map<String, String>> _allValues
+  -Locale _locale
+  +String buttonCancel
+  +String buttonDownload
+  +String buttonDownloadFile
+  +String buttonFollow
+  +String buttonFollowing
+  +String buttonImSure
+  +String buttonLight
+  +String buttonNext
+  +String buttonSelectFile
+  +String buttonSendResetLink
+  +String buttonSignAnonymous
+  +String buttonSignIn
+  +String buttonSignUp
+  +String buttonUpdateMy
+  +String connectionProblem
+  +String sendEmailFailed
+  +String sendingLink
+  +String sentLink
+  +String signGoogle
+  +String start
+  +String textAcceptOurTerms
+  +String textAcceptOurTermsAlt
+  +String textAccessProfile
+  +String textAccountActions
+  +String textAndOur
+  +String textAnonymousDisclaimer1
+  +String textAnonymousDisclaimer2
+  +String textAnonymousDisclaimer3
+  +String textAnonymousLoggingIn
+  +String textAppName
+  +String textAuthenticating
+  +String textAuthenticationFailed
+  +String textBonfireLit
+  +String textBonfirePlaceholder
+  +String textClearCache
+  +String textCompleted
+  +String textCompleteProfile
+  +String textConfirmNewPassword
+  +String textConfirmPassword
+  +String textContinueAnonymous
+  +String textConvertingAccount
+  +String textCurrentPassword
+  +String textDailyQuest
+  +String textDarkMode
+  +String textDeadline
+  +String textDownloading
+  +String textEditingProfilePicture
+  +String textEditProfilePicture
+  +String textEmail
+  +String textEmailUpdated
+  +String textErrorDownload
+  +String textErrorLightingBonfire
+  +String textErrorOccured
+  +String textErrorRecording
+  +String textExperience
+  +String textFeebackDisclaimer
+  +String textFeebackHint
+  +String textFile
+  +String textFileDownloaded
+  +String textFiles
+  +String textFollowing
+  +String textFollowingLimitReached
+  +String textForgotPassword
+  +String textGiveFeedback
+  +String textHaveAccount
+  +String textImage
+  +String textInitializingParameters
+  +String textInProgress
+  +String textInvalidConfirmPassword
+  +String textInvalidEmail
+  +String textInvalidName
+  +String textInvalidPassword
+  +String textInvalidProvidedPassword
+  +String textInvalidUsername
+  +String textLightBonfire
+  +String textLoggingOut
+  +String textLogout
+  +String textMoreInfo
+  +String textMyAccount
+  +String textMyBonfires
+  +String textMyData
+  +String textMyFollowing
+  +String textName
+  +String textNameUpdated
+  +String textNewEmailAddress
+  +String textNewName
+  +String textNewPassword
+  +String textNothingHere
+  +String textNotImplementedYet
+  +String textPassword
+  +String textPasswordUpdated
+  +String textPenalty
+  +String textPenaltyDescription
+  +String textPermissionDenied
+  +String textPermissionRequest
+  +String textPermissions
+  +String textPrivacy
+  +String textPrivacyPolicy
+  +String textPrivacyPolicyContent
+  +String textProfilePicture
+  +String textQuestDirections
+  +String textQuestionMark
+  +String textReportProblem
+  +String textReportProblemDisclaimer
+  +String textReportProblemHint
+  +String textResetLinkSent
+  +String textResetPasswordLink
+  +String textRetrieveBonfires
+  +String textRetrieveDeviceData
+  +String textRetrieveUserData
+  +String textSave
+  +String textSavingProfile
+  +String textSettings
+  +String textStatus
+  +String textStore
+  +String textSupport
+  +String textSureLogout
+  +String textSureModify
+  +String textTermsOfService
+  +String textTermsOfServiceContent
+  +String textText
+  +String textThanksFeedback
+  +String textThanksReportProblem
+  +String textTotal
+  +String textUpdateMyEmail
+  +String textUpdateMyName
+  +String textUpdateMyPassword
+  +String textUpdatingEmail
+  +String textUpdatingName
+  +String textUpdatingPassword
+  +String textUsername
+  +String textVideo
+  +String textWarning
+  +String textWarningDescription1
+  +String userEmailNotFound
+  +Locale currentLocale
+  +String currentLanguage
+  {static} +I18n of()
+  -String _getText()
+  {static} +Future load()
+}
+
+"bonfire::i18n.dart::I18n" o-- "dart::ui::Locale"
+
+class "bonfire::i18n.dart::I18nDelegate" {
+  {static} +Set<Locale> supportedLocals
+  +bool isSupported()
+  +Future load()
+  +bool shouldReload()
+}
+
+"flutter::src::widgets::localizations.dart::LocalizationsDelegate<T>" <|-- "bonfire::i18n.dart::I18nDelegate"
+
+abstract class "bonfire::models::bonfire.dart::Bonfire" {
+  +bool deleted
+  +bool expired
+  +int createdAt
+  +int expiresAt
+  +List<String> dislikes
+  +List<String> likes
+  +List<String> viewedBy
+  +List<String> visibleBy
+  +Position position
+  +String authorName
+  +String authorProfilePictureUrl
+  +String authorUsername
+  +String id
+  +Map toMap()
+}
+
+"bonfire::models::bonfire.dart::Bonfire" o-- "geolocator::geolocator.dart::Position"
+
+class "bonfire::models::bonfire.dart::TextBonfire" {
+  +String text
+  +Map toMap()
+}
+
+"bonfire::models::bonfire.dart::Bonfire" <|-- "bonfire::models::bonfire.dart::TextBonfire"
+
+class "bonfire::models::bonfire.dart::ImageBonfire" {
+  +String imageUrl
+  +String description
+  +Map toMap()
+}
+
+"bonfire::models::bonfire.dart::Bonfire" <|-- "bonfire::models::bonfire.dart::ImageBonfire"
+
+class "bonfire::models::bonfire.dart::VideoBonfire" {
+  +String videoUrl
+  +String description
+  +Map toMap()
+}
+
+"bonfire::models::bonfire.dart::Bonfire" <|-- "bonfire::models::bonfire.dart::VideoBonfire"
+
+class "bonfire::models::bonfire.dart::FileBonfire" {
+  +String fileUrl
+  +String fileName
+  +String description
+  +Map toMap()
+}
+
+"bonfire::models::bonfire.dart::Bonfire" <|-- "bonfire::models::bonfire.dart::FileBonfire"
+
+class "bonfire::models::daily_quest.dart::DailyQuest" {
+  +bool progressive
+  +int experience
+  +int maxLevel
+  +int minLevel
+  +Map<String, dynamic> description
+  +Map<String, dynamic> title
+  +String id
+  +String uniqueName
+  +Map toMap()
+  +String toString()
+}
+
+class "bonfire::models::follow.dart::Follow" {
+  +String name
+  +String photoUrl
+  +String username
+  +String uid
+  +Map toMap()
+  +String toString()
+}
+
+class "bonfire::models::penalty.dart::Penalty" {
+  +Map<String, dynamic> description
+  +Map<String, dynamic> title
+  +String id
+  +String uniqueName
+  +Map toMap()
+  +String toString()
+}
+
+class "bonfire::models::store_item.dart::StoreItem" {
+  +String id
+  +String translationKey
+  +int price
+  +String spotlightPromotionPictureUrl
+  +String promotionPictureUrl
+  +String description
+  +List<String> previewPictureUrls
+  +bool spotlight
+  +String toString()
+}
+
+class "bonfire::models::user_session.dart::UserSession" {
+  +bool isAnonymous
+  +int bonfireCount
+  +int createdAt
+  +int experience
+  +int fileBonfireCount
+  +int imageBonfireCount
+  +int level
+  +int nextLevelExperience
+  +int textBonfireCount
+  +int updatedAt
+  +int videoBonfireCount
+  +List following
+  +String email
+  +String name
+  +String password
+  +String photoUrl
+  +String uid
+  +String username
+  +String country
+  +Map<String, dynamic> dailyQuest
+  +Map<String, dynamic> penalty
+  +Map toMap()
+  +String toString()
+}
+
+class "bonfire::pages::auth::auth.dart::AuthPage" {
+  +_AuthPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::auth::auth.dart::AuthPage"
+
+class "bonfire::pages::auth::auth.dart::_AuthPageState" {
+  -LocalStorageRepository _localStorageRepository
+  +bool isAnonymous
+  +void initState()
+  -dynamic _policiesAcknowledgement()
+  +Widget build()
+}
+
+"bonfire::pages::auth::auth.dart::_AuthPageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::auth::auth.dart::_AuthPageState"
+
+class "bonfire::pages::auth::confirmation_link_sent.dart::ConfirmationLinkSentPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::auth::confirmation_link_sent.dart::ConfirmationLinkSentPage"
+
+class "bonfire::pages::auth::reset_password_link_sent.dart::ResetPasswordLinkSentPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::auth::reset_password_link_sent.dart::ResetPasswordLinkSentPage"
+
+class "bonfire::pages::auth::sign_in_anonymously.dart::SignInAnonymouslyPage" {
+  +_SignInAnonymouslyPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::auth::sign_in_anonymously.dart::SignInAnonymouslyPage"
+
+class "bonfire::pages::auth::sign_in_anonymously.dart::_SignInAnonymouslyPageState" {
+  -dynamic _policiesAcknowledgement()
+  -dynamic _alreadyHaveAnAccountLink()
+  -dynamic _showConfirmSignInAnonymouslyDialog()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::auth::sign_in_anonymously.dart::_SignInAnonymouslyPageState"
+
+class "bonfire::pages::auth::sign_in_problem.dart::SignInProblemPage" {
+  +_SignInProblemPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::auth::sign_in_problem.dart::SignInProblemPage"
+
+class "bonfire::pages::auth::sign_in_problem.dart::_SignInProblemPageState" {
+  -TextEditingController _emailController
+  +void initState()
+  +void dispose()
+  -bool _isSendResetLinkEnabled()
+  -dynamic _onEmailChanged()
+  -dynamic _sendResetLink()
+  +Widget build()
+}
+
+"bonfire::pages::auth::sign_in_problem.dart::_SignInProblemPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::auth::sign_in_problem.dart::_SignInProblemPageState"
+
+class "bonfire::pages::auth::sign_in_with_email.dart::SignInWithEmailPage" {
+  +_SignInWithEmailPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::auth::sign_in_with_email.dart::SignInWithEmailPage"
+
+class "bonfire::pages::auth::sign_in_with_email.dart::_SignInWithEmailPageState" {
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  +void initState()
+  +void dispose()
+  -bool _isSignInEnabled()
+  -dynamic _onEmailChanged()
+  -dynamic _onPasswordChanged()
+  -dynamic _signIn()
+  +Widget build()
+}
+
+"bonfire::pages::auth::sign_in_with_email.dart::_SignInWithEmailPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::auth::sign_in_with_email.dart::_SignInWithEmailPageState"
+
+class "bonfire::pages::auth::sign_up_with_email.dart::SignUpWithEmailPage" {
+  +_SignUpWithEmailPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::auth::sign_up_with_email.dart::SignUpWithEmailPage"
+
+class "bonfire::pages::auth::sign_up_with_email.dart::_SignUpWithEmailPageState" {
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  -TextEditingController _confirmPasswordController
+  +void initState()
+  +void dispose()
+  -bool _isSignUpEnabled()
+  -dynamic _onEmailChanged()
+  -dynamic _onPasswordChanged()
+  -dynamic _onConfirmPasswordChanged()
+  -dynamic _signUp()
+  +Widget build()
+}
+
+"bonfire::pages::auth::sign_up_with_email.dart::_SignUpWithEmailPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::auth::sign_up_with_email.dart::_SignUpWithEmailPageState"
+
+class "bonfire::pages::bonfire::bonfire.dart::BonfirePage" {
+  -Bonfire _bonfire
+  +_BonfirePageState createState()
+}
+
+"bonfire::pages::bonfire::bonfire.dart::BonfirePage" o-- "bonfire::models::bonfire.dart::Bonfire"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::bonfire::bonfire.dart::BonfirePage"
+
+class "bonfire::pages::bonfire::bonfire.dart::_BonfirePageState" {
+  -LocalStorageRepository _localStorageRepository
+  -VideoPlayerController _videoPlayerController
+  -String _username
+  -bool _isFollowing
+  -bool _isAnonymous
+  +void initState()
+  +void dispose()
+  -dynamic _goBack()
+  -dynamic _onMyProfileClicked()
+  -dynamic _onBonfireLikeClicked()
+  -dynamic _onBonfireDislikeClicked()
+  -bool _isCurrentUser()
+  -bool _isAnonymousBonfire()
+  -bool _isCurrentUserAlreadyFollowingBonfireAuthor()
+  -dynamic _buildProfileAvatar()
+  -dynamic _followBonfireAuthor()
+  -dynamic _unfollowBonfireAuthor()
+  -dynamic _getFollowingText()
+  -dynamic _getFollowingMethod()
+  -dynamic _getFollowingButtonColor()
+  -dynamic _getIsFollowing()
+  -dynamic _showUserProfileDialog()
+  -dynamic _buildHeader()
+  -dynamic _buildBody()
+  -dynamic _buildStateLoading()
+  -dynamic _buildImageBody()
+  -dynamic _buildVideoBody()
+  -dynamic _buildFileBody()
+  -dynamic _showDownloadDialog()
+  -dynamic _buildRatingView()
+  -dynamic _navigatoImageView()
+  -dynamic _navigateVideoView()
+  +Widget build()
+}
+
+"bonfire::pages::bonfire::bonfire.dart::_BonfirePageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::pages::bonfire::bonfire.dart::_BonfirePageState" o-- "video_player::video_player.dart::VideoPlayerController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::bonfire::bonfire.dart::_BonfirePageState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin<T>" <|-- "bonfire::pages::bonfire::bonfire.dart::_BonfirePageState"
+
+class "bonfire::pages::bonfire::bonfire_image_view.dart::BonfireImageViewPage" {
+  -ImageBonfire _bonfire
+  -Color _color
+  +_BonfireImageViewPageState createState()
+}
+
+"bonfire::pages::bonfire::bonfire_image_view.dart::BonfireImageViewPage" o-- "bonfire::models::bonfire.dart::ImageBonfire"
+"bonfire::pages::bonfire::bonfire_image_view.dart::BonfireImageViewPage" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::bonfire::bonfire_image_view.dart::BonfireImageViewPage"
+
+class "bonfire::pages::bonfire::bonfire_image_view.dart::_BonfireImageViewPageState" {
+  -ColorManipulation _colorManipulation
+  +void initState()
+  -dynamic _onDownloadImage()
+  +Widget build()
+}
+
+"bonfire::pages::bonfire::bonfire_image_view.dart::_BonfireImageViewPageState" o-- "bonfire::utils::color_manipulation.dart::ColorManipulation"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::bonfire::bonfire_image_view.dart::_BonfireImageViewPageState"
+
+class "bonfire::pages::bonfire::bonfire_video_view.dart::BonfireVideoViewPage" {
+  -VideoBonfire _bonfire
+  +_BonfireVideoViewPageState createState()
+}
+
+"bonfire::pages::bonfire::bonfire_video_view.dart::BonfireVideoViewPage" o-- "bonfire::models::bonfire.dart::VideoBonfire"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::bonfire::bonfire_video_view.dart::BonfireVideoViewPage"
+
+class "bonfire::pages::bonfire::bonfire_video_view.dart::_BonfireVideoViewPageState" {
+  -VideoPlayerController _videoPlayerController
+  -double _videoDuration
+  -double _currentVideoDuration
+  +void initState()
+  +void dispose()
+  -dynamic _formatVideoDuration()
+  -dynamic _onDownloadVideo()
+  +Widget build()
+}
+
+"bonfire::pages::bonfire::bonfire_video_view.dart::_BonfireVideoViewPageState" o-- "video_player::video_player.dart::VideoPlayerController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::bonfire::bonfire_video_view.dart::_BonfireVideoViewPageState"
+
+class "bonfire::pages::bonfire::widgets::bonfire_user_profile_dialog.dart::BonfireUserProfileDialog" {
+  -String _pictureUrl
+  -String _name
+  -String _username
+  -String _buttonTitle
+  -void Function() _onPressed
+  -double _width
+  -double _height
+  -bool _isAnonymous
+  -bool _isCurrentUser
+  -bool _isFollowing
+  -Color _buttonColor
+  +_BonfireUserProfileDialogState createState()
+}
+
+"bonfire::pages::bonfire::widgets::bonfire_user_profile_dialog.dart::BonfireUserProfileDialog" o-- "dart::ui::void Function()"
+"bonfire::pages::bonfire::widgets::bonfire_user_profile_dialog.dart::BonfireUserProfileDialog" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::bonfire::widgets::bonfire_user_profile_dialog.dart::BonfireUserProfileDialog"
+
+class "bonfire::pages::bonfire::widgets::bonfire_user_profile_dialog.dart::_BonfireUserProfileDialogState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::bonfire::widgets::bonfire_user_profile_dialog.dart::_BonfireUserProfileDialogState"
+
+class "bonfire::pages::complete_profile::complete_profile.dart::CompleteProfilePage" {
+  +_CompleteProfilePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::complete_profile::complete_profile.dart::CompleteProfilePage"
+
+class "bonfire::pages::complete_profile::complete_profile.dart::_CompleteProfilePageState" {
+  -LocalStorageRepository _localStorageRepository
+  -TextEditingController _usernameController
+  -TextEditingController _nameController
+  -File _file
+  +void initState()
+  +void dispose()
+  -bool _isStartEnabled()
+  -dynamic _onUsernameChanged()
+  -dynamic _onNameChanged()
+  -dynamic _onProfilePictureClicked()
+  -dynamic _start()
+  +Widget build()
+}
+
+"bonfire::pages::complete_profile::complete_profile.dart::_CompleteProfilePageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::pages::complete_profile::complete_profile.dart::_CompleteProfilePageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"bonfire::pages::complete_profile::complete_profile.dart::_CompleteProfilePageState" o-- "dart::io::File"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::complete_profile::complete_profile.dart::_CompleteProfilePageState"
+
+class "bonfire::pages::light_bonfire::light_bonfire_file.dart::LightBonfireFilePage" {
+  +_LightBonfireFilePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::light_bonfire::light_bonfire_file.dart::LightBonfireFilePage"
+
+class "bonfire::pages::light_bonfire::light_bonfire_file.dart::_LightBonfireFilePageState" {
+  +Logger logger
+  -Future _showFilePicker()
+  +Widget build()
+}
+
+"bonfire::pages::light_bonfire::light_bonfire_file.dart::_LightBonfireFilePageState" o-- "logger::src::logger.dart::Logger"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::light_bonfire::light_bonfire_file.dart::_LightBonfireFilePageState"
+
+class "bonfire::pages::light_bonfire::light_bonfire_file_preview.dart::LightBonfireFilePreviewPage" {
+  -File _file
+  +_LightBonfireFilePreviewPageState createState()
+}
+
+"bonfire::pages::light_bonfire::light_bonfire_file_preview.dart::LightBonfireFilePreviewPage" o-- "dart::io::File"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::light_bonfire::light_bonfire_file_preview.dart::LightBonfireFilePreviewPage"
+
+class "bonfire::pages::light_bonfire::light_bonfire_file_preview.dart::_LightBonfireFilePreviewPageState" {
+  -String _description
+  -dynamic _onLightBonfireClicked()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::light_bonfire::light_bonfire_file_preview.dart::_LightBonfireFilePreviewPageState"
+
+class "bonfire::pages::light_bonfire::light_bonfire_image.dart::LightBonfireImagePage" {
+  +_LightBonfireImagePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::light_bonfire::light_bonfire_image.dart::LightBonfireImagePage"
+
+class "bonfire::pages::light_bonfire::light_bonfire_image.dart::_LightBonfireImagePageState" {
+  -List<CameraDescription> _cameras
+  -CameraController _cameraController
+  +void initState()
+  +void dispose()
+  -Future _initCamera()
+  -Widget _buildCameraPreview()
+  -Widget _buildControlView()
+  -Future _showFilePicker()
+  -Future _captureImage()
+  -Future _onCameraSwitch()
+  +Widget build()
+}
+
+"bonfire::pages::light_bonfire::light_bonfire_image.dart::_LightBonfireImagePageState" o-- "camera::camera.dart::CameraController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::light_bonfire::light_bonfire_image.dart::_LightBonfireImagePageState"
+
+class "bonfire::pages::light_bonfire::light_bonfire_image_preview.dart::LightBonfireImagePreviewPage" {
+  -File _file
+  +_LightBonfireImagePreviewPageState createState()
+}
+
+"bonfire::pages::light_bonfire::light_bonfire_image_preview.dart::LightBonfireImagePreviewPage" o-- "dart::io::File"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::light_bonfire::light_bonfire_image_preview.dart::LightBonfireImagePreviewPage"
+
+class "bonfire::pages::light_bonfire::light_bonfire_image_preview.dart::_LightBonfireImagePreviewPageState" {
+  -String _description
+  -dynamic _onLightBonfireClicked()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::light_bonfire::light_bonfire_image_preview.dart::_LightBonfireImagePreviewPageState"
+
+class "bonfire::pages::light_bonfire::light_bonfire_text.dart::LightBonfireTextPage" {
+  +_LightBonfireTextPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::light_bonfire::light_bonfire_text.dart::LightBonfireTextPage"
+
+class "bonfire::pages::light_bonfire::light_bonfire_text.dart::_LightBonfireTextPageState" {
+  -String _text
+  -dynamic _onLightBonfireClicked()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::light_bonfire::light_bonfire_text.dart::_LightBonfireTextPageState"
+
+class "bonfire::pages::light_bonfire::light_bonfire_video.dart::LightBonfireVideoPage" {
+  +_LightBonfireVideoPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::light_bonfire::light_bonfire_video.dart::LightBonfireVideoPage"
+
+class "bonfire::pages::light_bonfire::light_bonfire_video.dart::_LightBonfireVideoPageState" {
+  +Logger logger
+  -List<CameraDescription> _cameras
+  -CameraController _cameraController
+  -bool _isRecording
+  -String _filePath
+  +void initState()
+  +void dispose()
+  -Future _initCamera()
+  -Widget _buildCameraPreview()
+  -Widget _buildControlView()
+  -Future _showFilePicker()
+  -Future _startVideoRecording()
+  -Future _stopVideoRecording()
+  -Future _onCameraSwitch()
+  +Widget build()
+}
+
+"bonfire::pages::light_bonfire::light_bonfire_video.dart::_LightBonfireVideoPageState" o-- "logger::src::logger.dart::Logger"
+"bonfire::pages::light_bonfire::light_bonfire_video.dart::_LightBonfireVideoPageState" o-- "camera::camera.dart::CameraController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::light_bonfire::light_bonfire_video.dart::_LightBonfireVideoPageState"
+
+class "bonfire::pages::light_bonfire::light_bonfire_video_preview.dart::LightBonfireVideoPreviewPage" {
+  -File _file
+  +_LightBonfireVideoPreviewPageState createState()
+}
+
+"bonfire::pages::light_bonfire::light_bonfire_video_preview.dart::LightBonfireVideoPreviewPage" o-- "dart::io::File"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::light_bonfire::light_bonfire_video_preview.dart::LightBonfireVideoPreviewPage"
+
+class "bonfire::pages::light_bonfire::light_bonfire_video_preview.dart::_LightBonfireVideoPreviewPageState" {
+  -VideoPlayerController _videoPlayerController
+  -double _videoDuration
+  -double _currentVideoDuration
+  -String _description
+  +void initState()
+  +void dispose()
+  -dynamic _onLightBonfireClicked()
+  -dynamic _formatVideoDuration()
+  +Widget build()
+}
+
+"bonfire::pages::light_bonfire::light_bonfire_video_preview.dart::_LightBonfireVideoPreviewPageState" o-- "video_player::video_player.dart::VideoPlayerController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::light_bonfire::light_bonfire_video_preview.dart::_LightBonfireVideoPreviewPageState"
+
+class "bonfire::pages::light_bonfire::widgets::light_bonfire_button.dart::LightBonfireButton" {
+  -void Function() _onPressed
+  -Text _text
+  -Color _color
+  -double _width
+  -double _height
+  -String _imagePath
+  +Widget build()
+}
+
+"bonfire::pages::light_bonfire::widgets::light_bonfire_button.dart::LightBonfireButton" o-- "dart::ui::void Function()"
+"bonfire::pages::light_bonfire::widgets::light_bonfire_button.dart::LightBonfireButton" o-- "flutter::src::widgets::text.dart::Text"
+"bonfire::pages::light_bonfire::widgets::light_bonfire_button.dart::LightBonfireButton" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::light_bonfire::widgets::light_bonfire_button.dart::LightBonfireButton"
+
+class "bonfire::pages::map::map.dart::MapPage" {
+  +_MapPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::map::map.dart::MapPage"
+
+class "bonfire::pages::map::map.dart::_MapPageState" {
+  +Logger logger
+  -LocalStorageRepository _localStorageRepository
+  -Map<String, Bonfire> _bonfiresMap
+  -Position _position
+  -List<Image> _bottomSheetImages
+  -MapboxMapController _mapController
+  -bool _darkMode
+  -bool _isAnonymous
+  -Map<String, dynamic> _dailyQuest
+  -bool _completed
+  +void initState()
+  +void didChangeDependencies()
+  +void dispose()
+  -void _onMapCreated()
+  -void _onSymbolTapped()
+  -dynamic _onMyProfileClicked()
+  -dynamic _onLightBonfireClicked()
+  -dynamic _buildProfileAvatar()
+  -dynamic _buildLightBonfireButton()
+  -dynamic _getBottomSheetText()
+  -dynamic _showModalBottomSheet()
+  -dynamic _createSymbols()
+  -dynamic _getDailyQuestNavigationPath()
+  -String _buildDailyQuestTooltipMessage()
+  -IconData _buildDailyQuestTooltipIcon()
+  -Color _buildDailyQuestTooltipColor()
+  +Widget build()
+}
+
+"bonfire::pages::map::map.dart::_MapPageState" o-- "logger::src::logger.dart::Logger"
+"bonfire::pages::map::map.dart::_MapPageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::pages::map::map.dart::_MapPageState" o-- "geolocator::geolocator.dart::Position"
+"bonfire::pages::map::map.dart::_MapPageState" o-- "mapbox_gl::mapbox_gl.dart::MapboxMapController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::map::map.dart::_MapPageState"
+
+class "bonfire::pages::map::widgets::light_bonfire_button.dart::LightBonfireButton" {
+  -void Function() _onTap
+  -Image _image
+  -String _text
+  +Widget build()
+}
+
+"bonfire::pages::map::widgets::light_bonfire_button.dart::LightBonfireButton" o-- "dart::ui::void Function()"
+"bonfire::pages::map::widgets::light_bonfire_button.dart::LightBonfireButton" o-- "flutter::src::widgets::image.dart::Image"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::map::widgets::light_bonfire_button.dart::LightBonfireButton"
+
+class "bonfire::pages::my_profile::my_bonfires.dart::MyBonfiresPage" {
+  +_MyBonfiresPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::my_profile::my_bonfires.dart::MyBonfiresPage"
+
+class "bonfire::pages::my_profile::my_bonfires.dart::_MyBonfiresPageState" {
+  -List<Bonfire> _bonfires
+  -List<Image> _bonfireImages
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::my_profile::my_bonfires.dart::_MyBonfiresPageState"
+
+class "bonfire::pages::my_profile::my_daily_quest.dart::MyDailyQuestPage" {
+  +_MyDailyQuestPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::my_profile::my_daily_quest.dart::MyDailyQuestPage"
+
+class "bonfire::pages::my_profile::my_daily_quest.dart::_MyDailyQuestPageState" {
+  -LocalStorageRepository _localStorageRepository
+  -Map<String, dynamic> _description
+  -Map<String, dynamic> _title
+  -int _bonfireToLit
+  -int _deadline
+  -int _experience
+  -bool _completed
+  -bool _progressive
+  -String _locale
+  +void initState()
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::my_daily_quest.dart::_MyDailyQuestPageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::my_profile::my_daily_quest.dart::_MyDailyQuestPageState"
+
+class "bonfire::pages::my_profile::my_following.dart::MyFollowingPage" {
+  +_MyFollowingPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::my_profile::my_following.dart::MyFollowingPage"
+
+class "bonfire::pages::my_profile::my_following.dart::_MyFollowingPageState" {
+  -LocalStorageRepository _localStorageRepository
+  -List _following
+  +void initState()
+  -dynamic _goBack()
+  -dynamic _buildProfileAvatar()
+  -dynamic _unfollow()
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::my_following.dart::_MyFollowingPageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::my_profile::my_following.dart::_MyFollowingPageState"
+
+class "bonfire::pages::my_profile::my_penalty.dart::MyPenaltyPage" {
+  +_MyPenaltyPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::my_profile::my_penalty.dart::MyPenaltyPage"
+
+class "bonfire::pages::my_profile::my_penalty.dart::_MyPenaltyPageState" {
+  -LocalStorageRepository _localStorageRepository
+  -Map<String, dynamic> _title
+  -Map<String, dynamic> _description
+  -int _deadline
+  -String _locale
+  +void initState()
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::my_penalty.dart::_MyPenaltyPageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::my_profile::my_penalty.dart::_MyPenaltyPageState"
+
+class "bonfire::pages::my_profile::my_profile.dart::MyProfilePage" {
+  +_MyProfilePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::my_profile::my_profile.dart::MyProfilePage"
+
+class "bonfire::pages::my_profile::my_profile.dart::_MyProfilePageState" {
+  -LocalStorageRepository _localStorageRepository
+  -String _username
+  -Map<String, dynamic> _dailyQuest
+  -bool _completed
+  +void initState()
+  -dynamic _showProfilePictureDialog()
+  -dynamic _onProfilePictureClicked()
+  -dynamic _buildProfileAvatar()
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::my_profile.dart::_MyProfilePageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::my_profile::my_profile.dart::_MyProfilePageState"
+
+class "bonfire::pages::my_profile::widgets::bonfire_profile_picture_dialog.dart::BonfireProfilePictureDialog" {
+  -String _pictureUrl
+  -String _buttonTitle
+  -void Function() _onPressed
+  -double _width
+  -double _height
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::widgets::bonfire_profile_picture_dialog.dart::BonfireProfilePictureDialog" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::my_profile::widgets::bonfire_profile_picture_dialog.dart::BonfireProfilePictureDialog"
+
+class "bonfire::pages::my_profile::widgets::file_bonfire_card.dart::FileBonfireCard" {
+  -FileBonfire _bonfire
+  -Image _image
+  -void Function() _onPressed
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::widgets::file_bonfire_card.dart::FileBonfireCard" o-- "bonfire::models::bonfire.dart::FileBonfire"
+"bonfire::pages::my_profile::widgets::file_bonfire_card.dart::FileBonfireCard" o-- "flutter::src::widgets::image.dart::Image"
+"bonfire::pages::my_profile::widgets::file_bonfire_card.dart::FileBonfireCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::my_profile::widgets::file_bonfire_card.dart::FileBonfireCard"
+
+class "bonfire::pages::my_profile::widgets::image_bonfire_card.dart::ImageBonfireCard" {
+  -ImageBonfire _bonfire
+  -Image _image
+  -void Function() _onPressed
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::widgets::image_bonfire_card.dart::ImageBonfireCard" o-- "bonfire::models::bonfire.dart::ImageBonfire"
+"bonfire::pages::my_profile::widgets::image_bonfire_card.dart::ImageBonfireCard" o-- "flutter::src::widgets::image.dart::Image"
+"bonfire::pages::my_profile::widgets::image_bonfire_card.dart::ImageBonfireCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::my_profile::widgets::image_bonfire_card.dart::ImageBonfireCard"
+
+class "bonfire::pages::my_profile::widgets::my_daily_quest_progress.dart::MyDailyQuestProgress" {
+  -LocalStorageRepository _localStorageRepository
+  +_MyDailyQuestProgressState createState()
+}
+
+"bonfire::pages::my_profile::widgets::my_daily_quest_progress.dart::MyDailyQuestProgress" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::my_profile::widgets::my_daily_quest_progress.dart::MyDailyQuestProgress"
+
+class "bonfire::pages::my_profile::widgets::my_daily_quest_progress.dart::_MyDailyQuestProgressState" {
+  -String _dailyQuestUniqueName
+  -int _fileBonfireCount
+  -int _imageBonfireCount
+  -int _textBonfireCount
+  -int _videoBonfireCount
+  -int _totalBonfireCount
+  -int _bonfireToLit
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::my_profile::widgets::my_daily_quest_progress.dart::_MyDailyQuestProgressState"
+
+class "bonfire::pages::my_profile::widgets::text_bonfire_card.dart::TextBonfireCard" {
+  -TextBonfire _bonfire
+  -Image _image
+  -void Function() _onPressed
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::widgets::text_bonfire_card.dart::TextBonfireCard" o-- "bonfire::models::bonfire.dart::TextBonfire"
+"bonfire::pages::my_profile::widgets::text_bonfire_card.dart::TextBonfireCard" o-- "flutter::src::widgets::image.dart::Image"
+"bonfire::pages::my_profile::widgets::text_bonfire_card.dart::TextBonfireCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::my_profile::widgets::text_bonfire_card.dart::TextBonfireCard"
+
+class "bonfire::pages::my_profile::widgets::video_bonfire_card.dart::VideoBonfireCard" {
+  -VideoBonfire _bonfire
+  -Image _image
+  -void Function() _onPressed
+  +Widget build()
+}
+
+"bonfire::pages::my_profile::widgets::video_bonfire_card.dart::VideoBonfireCard" o-- "bonfire::models::bonfire.dart::VideoBonfire"
+"bonfire::pages::my_profile::widgets::video_bonfire_card.dart::VideoBonfireCard" o-- "flutter::src::widgets::image.dart::Image"
+"bonfire::pages::my_profile::widgets::video_bonfire_card.dart::VideoBonfireCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::my_profile::widgets::video_bonfire_card.dart::VideoBonfireCard"
+
+class "bonfire::pages::privacy_policy::privacy_policy.dart::PrivacyPolicyPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::privacy_policy::privacy_policy.dart::PrivacyPolicyPage"
+
+class "bonfire::pages::search::search.dart::SearchPage" {
+  +_SearchPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::search::search.dart::SearchPage"
+
+class "bonfire::pages::search::search.dart::_SearchPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::search::search.dart::_SearchPageState"
+
+class "bonfire::pages::settings::edit_email_address.dart::EditEmailAddressPage" {
+  +_EditEmailAddressPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::edit_email_address.dart::EditEmailAddressPage"
+
+class "bonfire::pages::settings::edit_email_address.dart::_EditEmailAddressPageState" {
+  -LocalStorageRepository _localStorageRepository
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  +void initState()
+  +void dispose()
+  -dynamic _onEmailChanged()
+  -dynamic _onPasswordChanged()
+  -dynamic _showConfirmationDialog()
+  -bool _isEditEmailEnabled()
+  -dynamic _updateEmailAddress()
+  +Widget build()
+}
+
+"bonfire::pages::settings::edit_email_address.dart::_EditEmailAddressPageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::pages::settings::edit_email_address.dart::_EditEmailAddressPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::edit_email_address.dart::_EditEmailAddressPageState"
+
+class "bonfire::pages::settings::edit_name.dart::EditNamePage" {
+  +_EditNamePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::edit_name.dart::EditNamePage"
+
+class "bonfire::pages::settings::edit_name.dart::_EditNamePageState" {
+  -LocalStorageRepository _localStorageRepository
+  -TextEditingController _nameController
+  -TextEditingController _passwordController
+  +void initState()
+  +void dispose()
+  -dynamic _onNameChanged()
+  -dynamic _onPasswordChanged()
+  -dynamic _showConfirmationDialog()
+  -bool _isEditNameEnabled()
+  -dynamic _updateName()
+  +Widget build()
+}
+
+"bonfire::pages::settings::edit_name.dart::_EditNamePageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::pages::settings::edit_name.dart::_EditNamePageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::edit_name.dart::_EditNamePageState"
+
+class "bonfire::pages::settings::edit_password.dart::EditPasswordPage" {
+  +_EditPasswordPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::edit_password.dart::EditPasswordPage"
+
+class "bonfire::pages::settings::edit_password.dart::_EditPasswordPageState" {
+  -TextEditingController _currentPasswordController
+  -TextEditingController _newPasswordController
+  -TextEditingController _newPasswordConfirmationController
+  -dynamic _showConfirmationDialog()
+  -bool _isEditPasswordEnabled()
+  -dynamic _updatePassword()
+  +Widget build()
+}
+
+"bonfire::pages::settings::edit_password.dart::_EditPasswordPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::edit_password.dart::_EditPasswordPageState"
+
+class "bonfire::pages::settings::edit_permissions.dart::EditPermissionsPage" {
+  +_EditPermissionsPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::edit_permissions.dart::EditPermissionsPage"
+
+class "bonfire::pages::settings::edit_permissions.dart::_EditPermissionsPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::edit_permissions.dart::_EditPermissionsPageState"
+
+class "bonfire::pages::settings::give_feedback.dart::GiveFeedbackPage" {
+  +_GiveFeedbackPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::give_feedback.dart::GiveFeedbackPage"
+
+class "bonfire::pages::settings::give_feedback.dart::_GiveFeedbackPageState" {
+  -StringProcessor _stringProcessor
+  -String _body
+  -bool _isGiveFeedbackEnabled()
+  -dynamic _giveFeedback()
+  +Widget build()
+}
+
+"bonfire::pages::settings::give_feedback.dart::_GiveFeedbackPageState" o-- "stringprocess::src::stringprocess_base.dart::StringProcessor"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::give_feedback.dart::_GiveFeedbackPageState"
+
+class "bonfire::pages::settings::my_data.dart::MyDataPage" {
+  +_MyDataPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::my_data.dart::MyDataPage"
+
+class "bonfire::pages::settings::my_data.dart::_MyDataPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::my_data.dart::_MyDataPageState"
+
+class "bonfire::pages::settings::report_problem.dart::ReportProblemPage" {
+  +_ReportProblemPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::report_problem.dart::ReportProblemPage"
+
+class "bonfire::pages::settings::report_problem.dart::_ReportProblemPageState" {
+  -StringProcessor _stringProcessor
+  -String _body
+  -bool _isReportProblemEnabled()
+  -dynamic _reportProblem()
+  +Widget build()
+}
+
+"bonfire::pages::settings::report_problem.dart::_ReportProblemPageState" o-- "stringprocess::src::stringprocess_base.dart::StringProcessor"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::report_problem.dart::_ReportProblemPageState"
+
+class "bonfire::pages::settings::settings.dart::SettingsPage" {
+  +_SettingsPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::settings::settings.dart::SettingsPage"
+
+class "bonfire::pages::settings::settings.dart::_SettingsPageState" {
+  -LocalStorageRepository _localStorageRepository
+  -String _username
+  -String _appName
+  -String _version
+  -bool _darkMode
+  +void initState()
+  -dynamic _getPackageInfo()
+  -dynamic _toggleDarkMode()
+  -dynamic _onLogoutClicked()
+  -dynamic _showConfirmationDialog()
+  -dynamic _buildVersionAndMadeIn()
+  +Widget build()
+}
+
+"bonfire::pages::settings::settings.dart::_SettingsPageState" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::settings::settings.dart::_SettingsPageState"
+
+class "bonfire::pages::splash::splash.dart::SplashPage" {
+  +_SplashPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::splash::splash.dart::SplashPage"
+
+class "bonfire::pages::splash::splash.dart::_SplashPageState" {
+  -Image _image
+  +void initState()
+  +void didChangeDependencies()
+  -dynamic _buildStateText()
+  +Widget build()
+}
+
+"bonfire::pages::splash::splash.dart::_SplashPageState" o-- "flutter::src::widgets::image.dart::Image"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::splash::splash.dart::_SplashPageState"
+
+class "bonfire::pages::store::bloc::store_bloc.dart::StoreBloc" {
+  +StoreState initialState
+  +Stream mapEventToState()
+}
+
+"bonfire::pages::store::bloc::store_bloc.dart::StoreBloc" o-- "bonfire::pages::store::bloc::store_bloc.dart::StoreState"
+"bloc::src::bloc.dart::Bloc<Event, State>" <|-- "bonfire::pages::store::bloc::store_bloc.dart::StoreBloc"
+
+abstract class "bonfire::pages::store::bloc::store_bloc.dart::StoreEvent" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::pages::store::bloc::store_bloc.dart::StoreEvent"
+
+abstract class "bonfire::pages::store::bloc::store_bloc.dart::StoreState" {
+}
+
+"equatable::src::equatable.dart::Equatable" <|-- "bonfire::pages::store::bloc::store_bloc.dart::StoreState"
+
+class "bonfire::pages::store::bloc::store_bloc.dart::StoreInitial" {
+  +List<Object> props
+}
+
+"bonfire::pages::store::bloc::store_bloc.dart::StoreState" <|-- "bonfire::pages::store::bloc::store_bloc.dart::StoreInitial"
+
+class "bonfire::pages::store::item_preview.dart::ItemPreviewPage" {
+  -StoreItem _storeItem
+  +_ItemPreviewPageState createState()
+}
+
+"bonfire::pages::store::item_preview.dart::ItemPreviewPage" o-- "bonfire::models::store_item.dart::StoreItem"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::store::item_preview.dart::ItemPreviewPage"
+
+class "bonfire::pages::store::item_preview.dart::_ItemPreviewPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::store::item_preview.dart::_ItemPreviewPageState"
+
+class "bonfire::pages::store::store.dart::StorePage" {
+  +_StorePageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bonfire::pages::store::store.dart::StorePage"
+
+class "bonfire::pages::store::store.dart::_StorePageState" {
+  +List<StoreItem> storeItems
+  +void initState()
+  -dynamic _generateStaggeredTiles()
+  -dynamic _generateTiles()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "bonfire::pages::store::store.dart::_StorePageState"
+
+class "bonfire::pages::store::widgets::spotlight_store_item_card.dart::SpotlightStoreItemCard" {
+  -StoreItem _storeItem
+  -void Function() _onPressed
+  +Widget build()
+}
+
+"bonfire::pages::store::widgets::spotlight_store_item_card.dart::SpotlightStoreItemCard" o-- "bonfire::models::store_item.dart::StoreItem"
+"bonfire::pages::store::widgets::spotlight_store_item_card.dart::SpotlightStoreItemCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::store::widgets::spotlight_store_item_card.dart::SpotlightStoreItemCard"
+
+class "bonfire::pages::store::widgets::store_item_card.dart::StoreItemCard" {
+  -StoreItem _storeItem
+  -void Function() _onPressed
+  +Widget build()
+}
+
+"bonfire::pages::store::widgets::store_item_card.dart::StoreItemCard" o-- "bonfire::models::store_item.dart::StoreItem"
+"bonfire::pages::store::widgets::store_item_card.dart::StoreItemCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::store::widgets::store_item_card.dart::StoreItemCard"
+
+class "bonfire::pages::terms_of_service::terms_of_service.dart::TermsOfServicePage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::pages::terms_of_service::terms_of_service.dart::TermsOfServicePage"
+
+class "bonfire::repositories::authentication_repository.dart::AuthenticationRepository" {
+  -BaseAuthenticationService _authenticationService
+  {static} -AuthenticationRepository _singleton
+  +Future signInAnonymously()
+  +Future signUpWithEmail()
+  +Future convertUserWithEmail()
+  +Future signInWithEmail()
+  +Future resetPassword()
+  +Future signOut()
+  +Future getCurrentUser()
+  +Future isSignedIn()
+  +Future isAnonymous()
+  +Future updateEmail()
+  +Future updatePassword()
+}
+
+"bonfire::repositories::authentication_repository.dart::AuthenticationRepository" o-- "bonfire::services::authentication::base_authentication_service.dart::BaseAuthenticationService"
+"bonfire::repositories::authentication_repository.dart::AuthenticationRepository" o-- "bonfire::repositories::authentication_repository.dart::AuthenticationRepository"
+
+class "bonfire::repositories::bonfire_repository.dart::BonfireRepository" {
+  -BaseBonfireService _bonfireService
+  {static} -BonfireRepository _singleton
+  +Stream getBonfires()
+  +Stream getUserBonfires()
+  +Future lightBonfire()
+  +Future updateBonfireRating()
+  +Future updateBonfireExpirationDate()
+  +Future updateBonfireExpiration()
+  +Future updateBonfireViewedBy()
+}
+
+"bonfire::repositories::bonfire_repository.dart::BonfireRepository" o-- "bonfire::services::bonfire::base_bonfire_service.dart::BaseBonfireService"
+"bonfire::repositories::bonfire_repository.dart::BonfireRepository" o-- "bonfire::repositories::bonfire_repository.dart::BonfireRepository"
+
+class "bonfire::repositories::daily_quest_repository.dart::DailyQuestRepository" {
+  -DailyQuestService _dailyQuestService
+  {static} -DailyQuestRepository _singleton
+  +Future getDailyQuests()
+  +Future getRandomDailyQuest()
+  +Future getDailyQuestById()
+  +Future updateDailyQuest()
+  +Future updateDailyQuestById()
+  +Future nullifyDailyQuest()
+  +Future updateDailyQuestProgress()
+}
+
+"bonfire::repositories::daily_quest_repository.dart::DailyQuestRepository" o-- "bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService"
+"bonfire::repositories::daily_quest_repository.dart::DailyQuestRepository" o-- "bonfire::repositories::daily_quest_repository.dart::DailyQuestRepository"
+
+class "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository" {
+  -LocalStorageService _localStorageService
+  {static} -LocalStorageRepository _singleton
+  +Future initLocalStorageService()
+  +Future setUserSession()
+  +Future clearUserSession()
+  +Future setDailyQuest()
+  +Future clearDailyQuest()
+  +Future setPenalty()
+  +Future clearPenalty()
+  +Future setUserSessionData()
+  +Future clearUserSessionData()
+  +dynamic getUserSessionData()
+  +Future setSessionConfigData()
+  +Future clearSessionConfigData()
+  +dynamic getSessionConfigData()
+  +Future setDailyQuestData()
+  +Future clearDailyQuestData()
+  +dynamic getDailyQuestData()
+  +Future setPenaltyData()
+  +Future clearPenaltyData()
+  +dynamic getPenaltyData()
+}
+
+"bonfire::repositories::local_storage_repository.dart::LocalStorageRepository" o-- "bonfire::services::storage::local_storage_service.dart::LocalStorageService"
+"bonfire::repositories::local_storage_repository.dart::LocalStorageRepository" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+
+class "bonfire::repositories::notification_repository.dart::NotificationRepository" {
+  {static} -NotificationRepository _singleton
+}
+
+"bonfire::repositories::notification_repository.dart::NotificationRepository" o-- "bonfire::repositories::notification_repository.dart::NotificationRepository"
+
+class "bonfire::repositories::online_storage_repository.dart::OnlineStorageRepository" {
+  -FirebaseStorageService _store
+  {static} -OnlineStorageRepository _singleton
+  +Future uploadFile()
+}
+
+"bonfire::repositories::online_storage_repository.dart::OnlineStorageRepository" o-- "bonfire::services::storage::firebase_storage_service.dart::FirebaseStorageService"
+"bonfire::repositories::online_storage_repository.dart::OnlineStorageRepository" o-- "bonfire::repositories::online_storage_repository.dart::OnlineStorageRepository"
+
+class "bonfire::repositories::penalty_repository.dart::PenaltyRepository" {
+  -PenaltyService _penaltyService
+  {static} -PenaltyRepository _singleton
+  +Future getPenalties()
+  +Future getRandomPenalty()
+  +Future getPenaltyById()
+  +Future updatePenalty()
+  +Future updatePenaltyById()
+  +Future nullifyPenalty()
+}
+
+"bonfire::repositories::penalty_repository.dart::PenaltyRepository" o-- "bonfire::services::penalty::penalty_service.dart::PenaltyService"
+"bonfire::repositories::penalty_repository.dart::PenaltyRepository" o-- "bonfire::repositories::penalty_repository.dart::PenaltyRepository"
+
+class "bonfire::repositories::user_data_repository.dart::UserDataRepository" {
+  -BaseUserDataService _userDataService
+  {static} -UserDataRepository _singleton
+  +Future saveDetailsFromAuth()
+  +Future checkUsernameAvailability()
+  +Future saveProfileDetails()
+  +Future updateProfilePicture()
+  +Future isProfileComplete()
+  +Future getUser()
+  +Future getUidByUsername()
+  +Future updateName()
+  +Future updateBonfireCount()
+  +Future followUser()
+  +Future unfollowUser()
+  +Future updateExperience()
+  +Future updateLevel()
+  +Future updateNextLevelExperience()
+  +Future updateDailyQuest()
+  +Future updateDailyQuestStatus()
+  +Future updatePenalty()
+  +Future updateFileBonfireCount()
+  +Future updateImageBonfireCount()
+  +Future updateTextBonfireCount()
+  +Future updateVideoBonfireCount()
+  +Future nullifyDailyQuest()
+  +Future nullifyPenalty()
+  +Future zerofyAllBonfireTypesCount()
+}
+
+"bonfire::repositories::user_data_repository.dart::UserDataRepository" o-- "bonfire::services::user_data::base_user_data_service.dart::BaseUserDataService"
+"bonfire::repositories::user_data_repository.dart::UserDataRepository" o-- "bonfire::repositories::user_data_repository.dart::UserDataRepository"
+
+class "bonfire::route_generator.dart::BonfireCustomRoute<T>" {
+  +Widget buildTransitions()
+}
+
+"flutter::src::material::page.dart::MaterialPageRoute<T>" <|-- "bonfire::route_generator.dart::BonfireCustomRoute<T>"
+
+class "bonfire::route_generator.dart::RouteGenerator" {
+  {static} +Route generateRoute()
+  {static} -Route _errorRoute()
+}
+
+abstract class "bonfire::services::authentication::base_authentication_service.dart::BaseAuthenticationService" {
+  +Future signInAnonymously()
+  +Future signUpWithEmail()
+  +Future convertUserWithEmail()
+  +Future signInWithEmail()
+  +Future resetPassword()
+  +Future signOut()
+  +Future getCurrentUser()
+  +Future isSignedIn()
+  +Future isAnonymous()
+  +Future updateEmail()
+  +Future updatePassword()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::authentication::base_authentication_service.dart::BaseAuthenticationService"
+
+class "bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService" {
+  +Logger logger
+  -FirebaseAuth _firebaseAuth
+  -GoogleSignIn _googleSignIn
+  -Firestore _firestore
+  -LocalStorageRepository _localStorageRepository
+  {static} -FirebaseAuthenticationService _singleton
+  +Future signInAnonymously()
+  +Future signUpWithEmail()
+  +Future convertUserWithEmail()
+  +Future signInWithEmail()
+  +Future resetPassword()
+  +Future signOut()
+  +Future getCurrentUser()
+  +Future isSignedIn()
+  +Future isAnonymous()
+  +Future updateEmail()
+  +Future updatePassword()
+  +void dispose()
+}
+
+"bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService" o-- "logger::src::logger.dart::Logger"
+"bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService" o-- "google_sign_in::google_sign_in.dart::GoogleSignIn"
+"bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+"bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService" o-- "bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService"
+"bonfire::services::authentication::base_authentication_service.dart::BaseAuthenticationService" <|-- "bonfire::services::authentication::firebase_authentication_service.dart::FirebaseAuthenticationService"
+
+abstract class "bonfire::services::base_service.dart::BaseService" {
+  +void dispose()
+}
+
+abstract class "bonfire::services::bonfire::base_bonfire_service.dart::BaseBonfireService" {
+  +Stream getBonfires()
+  +Stream getUserBonfires()
+  +Future lightBonfire()
+  +Future updateBonfireRating()
+  +Future updateBonfireExpirationDate()
+  +Future updateBonfireExpiration()
+  +Future updateBonfireViewedBy()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::bonfire::base_bonfire_service.dart::BaseBonfireService"
+
+class "bonfire::services::bonfire::firebase_bonfire_service.dart::FirebaseBonfireService" {
+  -Firestore _firestore
+  {static} -FirebaseBonfireService _singleton
+  +Stream getBonfires()
+  +void mapDocumentToBonfire()
+  +Stream getUserBonfires()
+  +void mapQueryToBonfire()
+  +Future lightBonfire()
+  +Future updateBonfireRating()
+  +Future updateBonfireExpirationDate()
+  +Future updateBonfireExpiration()
+  +Future updateBonfireViewedBy()
+  +void dispose()
+}
+
+"bonfire::services::bonfire::firebase_bonfire_service.dart::FirebaseBonfireService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+"bonfire::services::bonfire::firebase_bonfire_service.dart::FirebaseBonfireService" o-- "bonfire::services::bonfire::firebase_bonfire_service.dart::FirebaseBonfireService"
+"bonfire::services::bonfire::base_bonfire_service.dart::BaseBonfireService" <|-- "bonfire::services::bonfire::firebase_bonfire_service.dart::FirebaseBonfireService"
+
+abstract class "bonfire::services::daily_quest::base_daily_quest_service.dart::BaseDailyQuestService" {
+  +Future getDailyQuests()
+  +Future getRandomDailyQuest()
+  +Future getDailyQuestById()
+  +Future updateDailyQuest()
+  +Future updateDailyQuestById()
+  +Future nullifyDailyQuest()
+  +Future updateDailyQuestProgress()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::daily_quest::base_daily_quest_service.dart::BaseDailyQuestService"
+
+class "bonfire::services::daily_quest::daily_quest_progress.dart::DailyQuestProgress" {
+  -LocalStorageRepository _localStorageRepository
+  +Future updateMasterOfBonfiresProgress()
+  +Future updateMasterOfTextsProgress()
+  +Future updateMasterOfImagesProgress()
+  +Future updateMasterOfVideosProgress()
+  +Future updateMasterOfFilesProgress()
+}
+
+"bonfire::services::daily_quest::daily_quest_progress.dart::DailyQuestProgress" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+
+class "bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService" {
+  -Firestore _firestore
+  -LocalStorageRepository _localStorageRepository
+  -DailyQuestProgress _dailyQuestProgress
+  {static} -DailyQuestService _singleton
+  +Future getDailyQuests()
+  +Future getRandomDailyQuest()
+  +Future getDailyQuestById()
+  +Future updateDailyQuest()
+  +Future updateDailyQuestById()
+  +Future nullifyDailyQuest()
+  +Future updateDailyQuestProgress()
+  +void dispose()
+}
+
+"bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+"bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService" o-- "bonfire::services::daily_quest::daily_quest_progress.dart::DailyQuestProgress"
+"bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService" o-- "bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService"
+"bonfire::services::daily_quest::base_daily_quest_service.dart::BaseDailyQuestService" <|-- "bonfire::services::daily_quest::daily_quest_service.dart::DailyQuestService"
+
+abstract class "bonfire::services::notification::base_notification_service.dart::BaseLocalNotificationService" {
+  +void initNotifications()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::notification::base_notification_service.dart::BaseLocalNotificationService"
+
+class "bonfire::services::notification::local_notification_service.dart::LocalNotificationService" {
+  -FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin
+  {static} -LocalNotificationService _singleton
+  +void initNotifications()
+  +Future onSelectNotification()
+  +void dispose()
+}
+
+"bonfire::services::notification::local_notification_service.dart::LocalNotificationService" o-- "flutter_local_notifications::src::flutter_local_notifications_plugin.dart::FlutterLocalNotificationsPlugin"
+"bonfire::services::notification::local_notification_service.dart::LocalNotificationService" o-- "bonfire::services::notification::local_notification_service.dart::LocalNotificationService"
+"bonfire::services::notification::base_notification_service.dart::BaseLocalNotificationService" <|-- "bonfire::services::notification::local_notification_service.dart::LocalNotificationService"
+
+abstract class "bonfire::services::penalty::base_penalty_service.dart::BasePenaltyService" {
+  +Future getPenalties()
+  +Future getRandomPenalty()
+  +Future getPenaltyById()
+  +Future updatePenalty()
+  +Future updatePenaltyById()
+  +Future nullifyPenalty()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::penalty::base_penalty_service.dart::BasePenaltyService"
+
+class "bonfire::services::penalty::penalty_service.dart::PenaltyService" {
+  -Firestore _firestore
+  -LocalStorageRepository _localStorageRepository
+  {static} -PenaltyService _singleton
+  +Future getPenalties()
+  +Future getRandomPenalty()
+  +Future getPenaltyById()
+  +Future updatePenalty()
+  +Future updatePenaltyById()
+  +Future nullifyPenalty()
+  +void dispose()
+}
+
+"bonfire::services::penalty::penalty_service.dart::PenaltyService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+"bonfire::services::penalty::penalty_service.dart::PenaltyService" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::services::penalty::penalty_service.dart::PenaltyService" o-- "bonfire::services::penalty::penalty_service.dart::PenaltyService"
+"bonfire::services::penalty::base_penalty_service.dart::BasePenaltyService" <|-- "bonfire::services::penalty::penalty_service.dart::PenaltyService"
+
+abstract class "bonfire::services::storage::base_storage_service.dart::BaseOnlineStorageService" {
+  +Future uploadFile()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::storage::base_storage_service.dart::BaseOnlineStorageService"
+
+abstract class "bonfire::services::storage::base_storage_service.dart::BaseLocalStorageService" {
+  +Future setUserSession()
+  +Future clearUserSession()
+  +Future setDailyQuest()
+  +Future clearDailyQuest()
+  +Future setPenalty()
+  +Future clearPenalty()
+  +Future setUserSessionData()
+  +Future clearUserSessionData()
+  +dynamic getUserSessionData()
+  +Future setSessionConfigData()
+  +Future clearSessionConfigData()
+  +dynamic getSessionConfigData()
+  +Future setDailyQuestData()
+  +Future clearDailyQuestData()
+  +dynamic getDailyQuestData()
+  +Future setPenaltyData()
+  +Future clearPenaltyData()
+  +dynamic getPenaltyData()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::storage::base_storage_service.dart::BaseLocalStorageService"
+
+class "bonfire::services::storage::firebase_storage_service.dart::FirebaseStorageService" {
+  +Logger logger
+  -FirebaseStorage _firebaseStorage
+  {static} -FirebaseStorageService _singleton
+  +Future uploadFile()
+  +void dispose()
+}
+
+"bonfire::services::storage::firebase_storage_service.dart::FirebaseStorageService" o-- "logger::src::logger.dart::Logger"
+"bonfire::services::storage::firebase_storage_service.dart::FirebaseStorageService" o-- "firebase_storage::firebase_storage.dart::FirebaseStorage"
+"bonfire::services::storage::firebase_storage_service.dart::FirebaseStorageService" o-- "bonfire::services::storage::firebase_storage_service.dart::FirebaseStorageService"
+"bonfire::services::storage::base_storage_service.dart::BaseOnlineStorageService" <|-- "bonfire::services::storage::firebase_storage_service.dart::FirebaseStorageService"
+
+class "bonfire::services::storage::local_storage_service.dart::LocalStorageService" {
+  +Logger logger
+  +Box userSessionBox
+  +Box sessionConfigBox
+  +Box dailyQuestBox
+  +Box penaltyBox
+  {static} -LocalStorageService _singleton
+  +Future initLocalStorageService()
+  +Future setUserSession()
+  +Future clearUserSession()
+  +Future setDailyQuest()
+  +Future clearDailyQuest()
+  +Future setPenalty()
+  +Future clearPenalty()
+  +Future setUserSessionData()
+  +Future clearUserSessionData()
+  +dynamic getUserSessionData()
+  +Future setSessionConfigData()
+  +Future clearSessionConfigData()
+  +dynamic getSessionConfigData()
+  +Future setDailyQuestData()
+  +Future clearDailyQuestData()
+  +dynamic getDailyQuestData()
+  +Future setPenaltyData()
+  +Future clearPenaltyData()
+  +dynamic getPenaltyData()
+  +void dispose()
+}
+
+"bonfire::services::storage::local_storage_service.dart::LocalStorageService" o-- "logger::src::logger.dart::Logger"
+"bonfire::services::storage::local_storage_service.dart::LocalStorageService" o-- "hive::hive.dart::Box"
+"bonfire::services::storage::local_storage_service.dart::LocalStorageService" o-- "bonfire::services::storage::local_storage_service.dart::LocalStorageService"
+"bonfire::services::storage::base_storage_service.dart::BaseLocalStorageService" <|-- "bonfire::services::storage::local_storage_service.dart::LocalStorageService"
+
+abstract class "bonfire::services::store::base_store_service.dart::BaseStoreService" {
+  +Future getStoreItems()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::store::base_store_service.dart::BaseStoreService"
+
+abstract class "bonfire::services::user_data::base_user_data_service.dart::BaseUserDataService" {
+  +Future saveDetailsFromAuth()
+  +Future checkUsernameAvailability()
+  +Future saveProfileDetails()
+  +Future isProfileComplete()
+  +Future getUser()
+  +Future getUidByUsername()
+  +Future updateProfilePicture()
+  +Future updateName()
+  +Future updateBonfireCount()
+  +Future followUser()
+  +Future unfollowUser()
+  +Future updateExperience()
+  +Future updateLevel()
+  +Future updateNextLevelExperience()
+  +Future updateDailyQuest()
+  +Future updateDailyQuestStatus()
+  +Future updatePenalty()
+  +Future updateFileBonfireCount()
+  +Future updateImageBonfireCount()
+  +Future updateTextBonfireCount()
+  +Future updateVideoBonfireCount()
+  +Future nullifyDailyQuest()
+  +Future nullifyPenalty()
+  +Future zerofyAllBonfireTypesCount()
+}
+
+"bonfire::services::base_service.dart::BaseService" <|-- "bonfire::services::user_data::base_user_data_service.dart::BaseUserDataService"
+
+class "bonfire::services::user_data::firebase_user_data_service.dart::FirebaseUserDataService" {
+  +Logger logger
+  -Firestore _firestore
+  -LocalStorageRepository _localStorageRepository
+  {static} -FirebaseUserDataService _singleton
+  +Future saveDetailsFromAuth()
+  +Future checkUsernameAvailability()
+  +Future saveProfileDetails()
+  +Future isProfileComplete()
+  +Future getUser()
+  +Future getUidByUsername()
+  +Future updateProfilePicture()
+  +Future updateName()
+  +Future updateBonfireCount()
+  +Future followUser()
+  +Future unfollowUser()
+  +Future updateExperience()
+  +Future updateLevel()
+  +Future updateNextLevelExperience()
+  +Future updateDailyQuest()
+  +Future updateDailyQuestStatus()
+  +Future updatePenalty()
+  +Future updateFileBonfireCount()
+  +Future updateImageBonfireCount()
+  +Future updateTextBonfireCount()
+  +Future updateVideoBonfireCount()
+  +Future nullifyDailyQuest()
+  +Future nullifyPenalty()
+  +Future zerofyAllBonfireTypesCount()
+  +void dispose()
+}
+
+"bonfire::services::user_data::firebase_user_data_service.dart::FirebaseUserDataService" o-- "logger::src::logger.dart::Logger"
+"bonfire::services::user_data::firebase_user_data_service.dart::FirebaseUserDataService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+"bonfire::services::user_data::firebase_user_data_service.dart::FirebaseUserDataService" o-- "bonfire::repositories::local_storage_repository.dart::LocalStorageRepository"
+"bonfire::services::user_data::firebase_user_data_service.dart::FirebaseUserDataService" o-- "bonfire::services::user_data::firebase_user_data_service.dart::FirebaseUserDataService"
+"bonfire::services::user_data::base_user_data_service.dart::BaseUserDataService" <|-- "bonfire::services::user_data::firebase_user_data_service.dart::FirebaseUserDataService"
+
+class "bonfire::simple_bloc_delegate.dart::SimpleBlocDelegate" {
+  +Logger logger
+  +void onEvent()
+  +void onTransition()
+  +void onError()
+}
+
+"bonfire::simple_bloc_delegate.dart::SimpleBlocDelegate" o-- "logger::src::logger.dart::Logger"
+"bloc::src::bloc_delegate.dart::BlocDelegate" <|-- "bonfire::simple_bloc_delegate.dart::SimpleBlocDelegate"
+
+class "bonfire::utils::color_manipulation.dart::ColorManipulation" {
+  +Color originalColor
+  -Color _color
+  +bool isDark()
+  +bool isLight()
+  +double getBrightness()
+}
+
+"bonfire::utils::color_manipulation.dart::ColorManipulation" o-- "dart::ui::Color"
+
+class "bonfire::utils::constants.dart::Constants" {
+  {static} +String sessionBonfireCount
+  {static} +String sessionCountry
+  {static} +String sessionCreatedAt
+  {static} +String sessionDailyQuest
+  {static} +String sessionEmail
+  {static} +String sessionExperience
+  {static} +String sessionFileBonfireCount
+  {static} +String sessionFollowing
+  {static} +String sessionImageBonfireCount
+  {static} +String sessionIsAnonymous
+  {static} +String sessionLevel
+  {static} +String sessionName
+  {static} +String sessionNextLevelExperience
+  {static} +String sessionPassword
+  {static} +String sessionPenalty
+  {static} +String sessionProfilePictureUrl
+  {static} +String sessionTextBonfireCount
+  {static} +String sessionUid
+  {static} +String sessionUpdatedAt
+  {static} +String sessionUpdateUserExperience
+  {static} +String sessionUpdateUserLevel
+  {static} +String sessionUsername
+  {static} +String sessionVideoBonfireCount
+  {static} +String dailyQuestBonfireToLit
+  {static} +String dailyQuestCompleted
+  {static} +String dailyQuestDeadline
+  {static} +String dailyQuestDescription
+  {static} +String dailyQuestExperience
+  {static} +String dailyQuestPreviousDailyQuestId
+  {static} +String dailyQuestProgressive
+  {static} +String dailyQuestTitle
+  {static} +String dailyQuestId
+  {static} +String dailyQuestUniqueName
+  {static} +String penaltyDeadline
+  {static} +String penaltyDescription
+  {static} +String penaltyPreviousPenaltyId
+  {static} +String penaltyTitle
+  {static} +String penaltyId
+  {static} +String penaltyUniqueName
+  {static} +String configDarkMode
+  {static} +String configFirstRun
+  {static} +String configImageCompression
+  {static} +String configLocale
+  {static} +double exponent
+  {static} +int baseXp
+  {static} +int baseQuestBonfireCount
+  {static} +String updateDailyQuestOrPenalty
+}
+
+abstract class "bonfire::utils::exceptions.dart::BonfireException" {
+  +String message
+}
+
+"dart::core::Exception" <|-- "bonfire::utils::exceptions.dart::BonfireException"
+
+class "bonfire::utils::exceptions.dart::UserNotFoundException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::UserNotFoundException"
+
+class "bonfire::utils::exceptions.dart::UsernameMappingUndefinedException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::UsernameMappingUndefinedException"
+
+class "bonfire::utils::exceptions.dart::UsernameAlreadyExistsException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::UsernameAlreadyExistsException"
+
+class "bonfire::utils::exceptions.dart::EmailAlreadyUsedException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::EmailAlreadyUsedException"
+
+class "bonfire::utils::exceptions.dart::EmailUserNotFoundException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::EmailUserNotFoundException"
+
+class "bonfire::utils::exceptions.dart::SendConfirmationEmailFailedException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::SendConfirmationEmailFailedException"
+
+class "bonfire::utils::exceptions.dart::EmailNotVerifiedException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::EmailNotVerifiedException"
+
+class "bonfire::utils::exceptions.dart::DownloadFailedException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::DownloadFailedException"
+
+class "bonfire::utils::exceptions.dart::InvalidPasswordException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::InvalidPasswordException"
+
+class "bonfire::utils::exceptions.dart::FollowingLimitReachedException" {
+}
+
+"bonfire::utils::exceptions.dart::BonfireException" <|-- "bonfire::utils::exceptions.dart::FollowingLimitReachedException"
+
+class "bonfire::utils::image_view_arguments.dart::ImageViewArguments" {
+  +ImageBonfire bonfire
+  +Color color
+}
+
+"bonfire::utils::image_view_arguments.dart::ImageViewArguments" o-- "bonfire::models::bonfire.dart::ImageBonfire"
+"bonfire::utils::image_view_arguments.dart::ImageViewArguments" o-- "dart::ui::Color"
+
+class "bonfire::utils::palettes.dart::PaletteOne" {
+  {static} +Color colorOne
+  {static} +Color colorTwo
+  {static} +Color colorThree
+  {static} +Color colorFour
+  {static} +Color colorFive
+}
+
+"bonfire::utils::palettes.dart::PaletteOne" o-- "dart::ui::Color"
+
+class "bonfire::utils::palettes.dart::PaletteTwo" {
+  {static} +Color colorOne
+  {static} +Color colorTwo
+  {static} +Color colorThree
+  {static} +Color colorFour
+  {static} +Color colorFive
+}
+
+"bonfire::utils::palettes.dart::PaletteTwo" o-- "dart::ui::Color"
+
+class "bonfire::utils::palettes.dart::PaletteThree" {
+  {static} +Color colorOne
+  {static} +Color colorTwo
+  {static} +Color colorThree
+  {static} +Color colorFour
+  {static} +Color colorFive
+}
+
+"bonfire::utils::palettes.dart::PaletteThree" o-- "dart::ui::Color"
+
+class "bonfire::utils::palettes.dart::PaletteFour" {
+  {static} +Color colorOne
+  {static} +Color colorTwo
+  {static} +Color colorThree
+}
+
+"bonfire::utils::palettes.dart::PaletteFour" o-- "dart::ui::Color"
+
+class "bonfire::utils::paths.dart::Paths" {
+  {static} +String bonfiresPath
+  {static} +String dailyQuestsPath
+  {static} +String penaltiesPath
+  {static} +String usernameUidMapPath
+  {static} +String usersPath
+  {static} +String fileAttachmentsPath
+  {static} +String imageAttachmentsPath
+  {static} +String profilePicturePath
+  {static} +String videoAttachmentsPath
+  {static} +dynamic getAttachmentsPathByFileType()
+}
+
+class "bonfire::utils::themes.dart::Themes" {
+  {static} +ThemeData light
+  {static} +ThemeData dark
+}
+
+"bonfire::utils::themes.dart::Themes" o-- "flutter::src::material::theme_data.dart::ThemeData"
+
+class "bonfire::utils::validators.dart::Validators" {
+  {static} -RegExp _emailRegex
+  {static} -RegExp _passwordRegex
+  {static} +dynamic email()
+  {static} +dynamic password()
+  {static} +dynamic name()
+  {static} +dynamic username()
+}
+
+class "bonfire::widgets::bonfire_circle_button.dart::BonfireCircleButton" {
+  -void Function() _onTap
+  -double _width
+  -Color _color
+  -Color _borderColor
+  +Widget build()
+}
+
+"bonfire::widgets::bonfire_circle_button.dart::BonfireCircleButton" o-- "dart::ui::void Function()"
+"bonfire::widgets::bonfire_circle_button.dart::BonfireCircleButton" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::widgets::bonfire_circle_button.dart::BonfireCircleButton"
+
+class "bonfire::widgets::bonfire_daily_quest_dialog.dart::BonfireDailyQuestDialog" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::widgets::bonfire_daily_quest_dialog.dart::BonfireDailyQuestDialog"
+
+class "bonfire::widgets::bonfire_dialog.dart::BonfireDialog" {
+  -String _title
+  -RichText _description
+  -String _titleButton1
+  -void Function() _onPressedButton1
+  -String _titleButton2
+  -void Function() _onPressedButton2
+  -double _width
+  -double _height
+  +Widget build()
+}
+
+"bonfire::widgets::bonfire_dialog.dart::BonfireDialog" o-- "flutter::src::widgets::basic.dart::RichText"
+"bonfire::widgets::bonfire_dialog.dart::BonfireDialog" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::widgets::bonfire_dialog.dart::BonfireDialog"
+
+class "bonfire::widgets::bonfire_rating_button.dart::BonfireRatingButton" {
+  -void Function() _onPressed
+  -String _imagePath
+  -List<String> _ratings
+  -Color _color
+  -String _username
+  +Widget build()
+}
+
+"bonfire::widgets::bonfire_rating_button.dart::BonfireRatingButton" o-- "dart::ui::void Function()"
+"bonfire::widgets::bonfire_rating_button.dart::BonfireRatingButton" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::widgets::bonfire_rating_button.dart::BonfireRatingButton"
+
+class "bonfire::widgets::bonfire_text_field.dart::BonfireTextField" {
+  -void Function(String) _onChanged
+  -String _hintText
+  +Widget build()
+}
+
+"bonfire::widgets::bonfire_text_field.dart::BonfireTextField" o-- "bonfire::widgets::bonfire_text_field.dart::void Function(String)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::widgets::bonfire_text_field.dart::BonfireTextField"
+
+class "bonfire::widgets::bonfire_text_form_field.dart::BonfireTextFormField" {
+  -void Function(String) _onChanged
+  -void Function(String) _validator
+  -TextEditingController _controller
+  -String _initialValue
+  -TextInputType _keyboardType
+  -bool _obscureText
+  -bool _autocorrect
+  -bool _enableSuggestions
+  -String _labelText
+  -String _hintText
+  -Widget _prefixIcon
+  -int _errorMaxLines
+  +Widget build()
+}
+
+"bonfire::widgets::bonfire_text_form_field.dart::BonfireTextFormField" o-- "bonfire::widgets::bonfire_text_form_field.dart::void Function(String)"
+"bonfire::widgets::bonfire_text_form_field.dart::BonfireTextFormField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"bonfire::widgets::bonfire_text_form_field.dart::BonfireTextFormField" o-- "flutter::src::services::text_input.dart::TextInputType"
+"bonfire::widgets::bonfire_text_form_field.dart::BonfireTextFormField" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::widgets::bonfire_text_form_field.dart::BonfireTextFormField"
+
+class "bonfire::widgets::custom_bonfire_button.dart::CustomBonfireButton" {
+  -void Function() _onPressed
+  -Text _text
+  -Color _color
+  -double _minWidth
+  -double _height
+  -String _imagePath
+  +Widget build()
+}
+
+"bonfire::widgets::custom_bonfire_button.dart::CustomBonfireButton" o-- "dart::ui::void Function()"
+"bonfire::widgets::custom_bonfire_button.dart::CustomBonfireButton" o-- "flutter::src::widgets::text.dart::Text"
+"bonfire::widgets::custom_bonfire_button.dart::CustomBonfireButton" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bonfire::widgets::custom_bonfire_button.dart::CustomBonfireButton"
+
+
+@enduml

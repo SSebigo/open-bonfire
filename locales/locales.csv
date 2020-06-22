@@ -1,0 +1,143 @@
+keys,en,fr
+buttonCancel,Cancel,Annuler
+buttonDownload,Download,Télécharger
+buttonDownloadFile,Download the file,Télécharger le fichier
+buttonFollow,Follow,S'abonner
+buttonFollowing,Following,Abonné
+buttonImSure,I'm sure,Je suis sûre
+buttonLight,Light,Allumer
+buttonNext,Next,Continuer
+buttonSelectFile,Choose a file,Sélectionner un fichier
+buttonSendResetLink,Send recovery link,Envoyer le lien de récupération
+buttonSignAnonymous,Start Anonymously,Commencer Anonymement
+buttonSignIn,Login,Se connecter
+buttonSignUp,Create an account,Créer un compte
+buttonUpdateMy,Update my," Mettre à jour mon"
+connectionProblem,Trouble logging in?,Problème de connexion ?
+sendEmailFailed,Sending the confirmation email failed,L'envoi de l'email de confirmation a échoué
+sendingLink,We send you an email with a confirmation link,Nous t'envoyons un email contenant un lien de confirmation
+sentLink,We sent you an email with a confirmation link,Nous t'avons envoyé un email contenant un lien de confirmation
+signGoogle,Sign in with Google,Se connecter via Google
+start,Let's go,C'est parti
+textAcceptOurTerms,"By logging in you accept our ","En te connectant tu acceptes nos "
+textAcceptOurTermsAlt,"By creating an account and/or logging in you accept our ","En créant un compte et/ou en te connectant tu acceptes nos "
+textAccessProfile,"To access the user profile, you need to create a permanent account or log in with an existing account!","Pour accéder au profil utilisateur, tu dois créer un compte permanent ou te connecter avec un compte existant !"
+textAccountActions,Account actions,Actions de compte
+textAndOur," and our "," et notre "
+textAnonymousDisclaimer1,By logging in anonymously you will not have access to the following features,En te connectant anonymement tu n'auras pas accés aux fonctionnalités suivantes
+textAnonymousDisclaimer2,- A user profile,- Un profil utilisateur
+textAnonymousDisclaimer3,- Bonfire rating,- La notation des feux de camp
+textAnonymousLoggingIn,"We're connecting you, please wait...","Nous te connectons, un peu de patience..."
+textAppName,Bonfire,
+textAuthenticating,Authentication in progress...,Authentification en cours...
+textAuthenticationFailed,Authentication failure,Echec de l'authentification
+textBonfireLit,Bonfires lit,Feux de camp allumés
+textBonfirePlaceholder,What's on your mind today?,Qu'as-tu en tête aujourd'hui ?
+textClearCache,Clear the cache,Vider le cache
+textCompleted,completed,complétée
+textCompleteProfile,Complete your profile,Complète ton profil
+textConfirmNewPassword,Confirm your new password,Confirme ton nouveau mot de passe
+textConfirmPassword,Confirm your password,Confirme ton mot de passe
+textContinueAnonymous,"Continue anonymously? ",Continuer anonymement ?
+textConvertingAccount,"Anonymous account conversion in progress, please wait...","Convertion du compte anonyme en cours, un peu de patience..."
+textCurrentPassword,Current password,Mot de passe actuel
+textDailyQuest,Daily Quest,Quête journalière
+textDarkMode,Dark Mode,Mode Nuit
+textDeadline,Deadline,Échéance
+textDownloading,"The download has started, please wait...","Le téléchargement à commencé, un peu de patience..."
+textDownloadManager,Download Manager,Gestionnaire de téléchargements
+textEditingProfilePicture,"We're updating your profile picture, please wait...","Nous mettons à jours ta photo de profil, un peu de patience..."
+textEditProfilePicture,Edit my profile picture,Modifier ma photo de profil
+textEmail,E-mail address,Adresse e-mail
+textEmailUpdated,Your e-mail address has been updated!,Ton adresse e-mail a été mis à jour !
+textErrorDownload,"An error occurred during the download, try again later.","Une erreur est survenue durant le téléchargement, réessaies plus tard."
+textErrorLightingBonfire,Sorry we didn't get to light your bonfire,"Désolé, nous n'avons pas pu allumer ton feu de camp"
+textErrorOccured,An error has occurred,Une erreur est survenue
+textErrorRecording,Something went wrong during the recording,Quelque chose a mal tourné pendant l'enregistrement
+textExperience,Experience,Expérience
+textFailedLoadContent,Failed to load content,Échec du chargement du contenu
+textFeebackDisclaimer,"This page allows you to give your opinion on the app, suggest ideas for features and/or changes. If you want to report a problem with the app, use the dedicated page instead.","Cette page te permet de donner ton avis sur l'appli, proposer des idées de fonctionnalités et/ou des changements. Si tu veux signaler un problème sur l'appli, utilise plutôt la page dédiée."
+textFeebackHint,What do you want to tell us?,Que veux-tu nous dire ?
+textFile,File,Fichier
+textFileDownloaded,File downloaded,Fichier téléchargé
+textFiles,File(s),Fichier(s)
+textFollowing,Following,Abonné
+textFollowingLimitReached,You've reached the limit of the number of following,Tu as atteint la limite du nombre d'abonnement
+textForgotPassword,Forgot your password?,Mot de passe oublié ?
+textGiveFeedback,Give feedback,Donner un avis
+textHaveAccount,I already have an account/I want to create an account,J'ai déjà un compte/Je veux créer un compte
+textImage,Image,
+textInitializing,Initializing,Initialisation
+textInitializingParameters,Initialization of minor parameters in progress...,Initialisation de paramètres mineurs en cours...
+textInProgress,in progress,en cours
+textInvalidConfirmPassword,Passwords must be the same,Les mots de passe doivent être les mêmes
+textInvalidEmail,Invalid e-mail address,Addrese e-mail invalide
+textInvalidName,The name must not be null or empty,Le nom ne doit pas être nul ou vide
+textInvalidPassword,"The password must be at least 8 characters long and must include at least\n1 lowercase,\n1 uppercase,\n1 digit\n1 special character","Le mot de passe doit contenir au minimum 8 caractères et doit inclure au moins\n1 minuscule,\n1 majuscule,\n1 chiffre\n1 caractére spécial"
+textInvalidProvidedPassword,The password provided is invalid,Le mot de passe fournie est invalide
+textInvalidUsername,The username must not be null or empty,e nom d'utilisateur ne doit pas être nul ou vide
+textLightBonfire,Light a bonfire,Allumer un feu de camp
+textLoggingOut,Logging out...,Déconnexion en cours...
+textLogout,Logout,Déconnexion
+textMoreInfo,More information,Plus d'information
+textMyAccount,My account,Mon compte
+textMyBonfires,My bonfires,Mes feux de camp
+textMyData,My data,Mes données
+textMyFollowing,My following,Mes abonnements
+textMyTrophies,My trophies,Mes trophées
+textName,Name,Nom
+textNameUpdated,Your name has been updated!,Ton nom a été mis à jour !
+textNewEmailAddress,New e-mail address,Nouvelle adresse e-mail
+textNewName,New name,Nouveau nom
+textNewPassword,New password,Nouveau mot de passe
+textNothingHere,Nothing to see here,Rien à voir ici
+textNotImplementedYet,"This feature has not yet been implemented, stay tuned, it will come with future updates.","Cette fonctionnalité n'a pas encore été implémentée, reste à l'écoute, elle sera disponible avec les futures mises à jour."
+textPassword,Password,Mot de passe
+textPasswordUpdated,Your password has been updated!,Ton mot de passe a été mis à jour !
+textPenalty,Penalty,Sanction
+textPenaltyDescription,Description of the penalty,Description de la sanction
+textPermissionDenied,An application for authorization was rejected.,Une demande d'autorisation a été rejetée.
+textPermissionRequest,Applications for authorizations are in progress...,Les demandes d'autorisations sont en cours...
+textPermissions,Permissions,Autorisations
+textPrivacy,Privacy,Confidentialité
+textPrivacyPolicy,Privacy Policy,Politique de confidentialité
+textPrivacyPolicyContent,"We don't have a privacy policy yet, we do our best to make it available to our users as soon as possible.","Nous n'avons pas encore de politique de confidentialité, nous faisons de notre mieux pour les mettres à disposition de nos utilisateurs au plus vite."
+textProfilePicture,Profile picture,Photo de profil
+textQuestDirections,Quest directions,Instructions de quête
+textQuestionMark,?," ?"
+textReportProblem,Report a problem,Signaler un problème
+textReportProblemDisclaimer,Additional information about the device will be sent to enable us to solve the problem as soon as possible,Des informations complémentaires concernant l'appareil seront envoyées pour nous permettre de résoudre le problème au plus vite
+textReportProblemHint,What problem did you run into?,Quel problème as-tu rencontré ?
+textResetLinkSent,A recovery link has been sent to your email address.,Un lien de récupération a été envoyé à votre adresse e-mail.
+textResetPasswordLink,A recovery link will be sent to your email address,Un lien de récupération va t'etre envoyé sur ton adresse e-mail
+textRetrieveBonfires,Retrieve bonfires,Récupérer les feux de camp
+textRetrieveDeviceData,"Retrieving information on the current device, please wait...","Récupération des informations sur l'appareil en cours, un peu de patience..."
+textRetrieveUserData,"Retrieving user information, please wait...","Récupération des informations sur l'utilisateur, un peu de patience..."
+textSave,Save,Enregistrer
+textSavingProfile,"Saving the profile, please wait...","Sauvegarde du profil en cours, un peu de patience..."
+textSettings,Settings,Paramètres
+textStatus,Status,Statut
+textStore,Store,Boutique
+textSuccessInitialized,Successfully initialized,Initialisé avec succès
+textSupport,Support,Assistance
+textSureLogout,Are you sure you want to logout?,Es-tu sûre de vouloir te déconnecter ?
+textSureModify,Are you sure you want to change your,Es-tu sûre de vouloir modifier ton
+textTaskManager,Task Manager,Gestionnaire de tâches
+textTermsOfService,Terms of Services,Conditions générales d'utilisation
+textTermsOfServiceContent,"We do not yet have general terms and conditions of use, we do our best to make them available to our users as soon as possible.","Nous n'avons pas encore de conditions générales d'utilisation, nous faisons de notre mieux pour les mettres à disposition de nos utilisateurs au plus vite."
+textText,Text,Texte
+textThanksFeedback,"Thank you for your feedback, we'll do our best to make good use of it","Merci pour ton feedback, nous ferons au mieux pour en faire bonne usage"
+textThanksReportProblem,"The problem has been reported, we'll do our best to solve it","Le problème as été signalé, nous ferons au mieux pour le résoudre"
+textTotal,Total,Total
+textTranslationManager,Translation Manager,Gestionnaire de traductions
+textUpdateMyEmail,Update my e-mail address,Mettre à jour mon adresse e-mail
+textUpdateMyName,Update my name,Mettre à jour mon nom
+textUpdateMyPassword,Update my password,Mettre à jour mon mot de passe
+textUpdatingEmail,"Updating your e-mail address, please wait...",Mise à jour de ton adresse e-mail en cours...
+textUpdatingName,"Updating your name, please wait...",Mise à jour de ton nom en cours...
+textUpdatingPassword,"Updating your password, please wait...",Mise à jour de ton mot de passe en cours...
+textUsername,Username,Nom d'utilisateur
+textVideo,Video,Vidéo
+textWarning,Warning,Avertissement
+textWarningDescription1,the failure of this daily quest will result in a penalty,l'échec de cette quête quotidienne entrainera une sanction
+userEmailNotFound,We couldn't find any accounts associated with this email,Nous n'avons trouvé aucun compte associé à cet email

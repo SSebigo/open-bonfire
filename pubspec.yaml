@@ -1,0 +1,131 @@
+name: bonfire
+description: Bonfire is a modern social app
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.1.1+6
+
+environment:
+  sdk: ">=2.3.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  awesome_button: ^1.0.2
+  background_fetch: ^0.5.4
+  bloc: ^2.0.0
+  cached_network_image: ^2.0.0-rc.1
+  camera: ^0.5.7+2
+  circular_profile_avatar: ^1.0.3
+  cloud_firestore: ^0.12.10+2
+  color_thief_flutter: ^1.0.1
+  dependency_validator: ^1.0.0
+  device_info: ^0.4.1+4
+  devicelocale: ^0.2.1
+  downloads_path_provider: ^0.1.0
+  equatable: ^1.0.1
+  extended_image: ^0.8.0
+  faker: ^1.2.1
+  file_picker: ^1.4.3+2
+  firebase_auth: ^0.16.0
+  firebase_core: ^0.4.2
+  firebase_dynamic_links: ^0.5.0+8
+  firebase_storage: ^3.0.8
+  flushbar: ^1.10.4
+  flutter_bloc: ^2.0.1
+  flutter_downloader: ^1.4.1
+  flutter_email_sender: ^2.2.2
+  flutter_icons: ^1.0.0+1
+  flutter_local_notifications: ^1.2.0+4
+  flutter_staggered_grid_view: ^0.3.0
+  geoflutterfire: ^2.0.3+5
+  geolocator: ^5.1.5
+  google_fonts: ^0.2.0
+  google_sign_in: ^4.4.1
+  hive: ^1.4.1+1
+  hive_flutter: ^0.3.0+2
+  image_picker: ^0.6.2+3
+  jiffy: ^2.2.0
+  logger: ^0.8.1
+  mapbox_gl: ^0.0.5
+  mime: ^0.9.6+3
+  package_info: ^0.4.0+13
+  page_transition: ^1.1.5
+  password: ^1.0.0
+  path_provider: ^1.5.1
+  permission_handler: ^4.0.0
+  rounded_modal: ^1.0.1
+  sailor: ^0.7.1
+  sliding_up_panel: ^1.0.0
+  stringprocess: ^1.0.10
+  time: ^1.2.0
+  timeago: ^2.0.26
+  uuid: ^2.0.4
+  video_player: ^0.10.5
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+
+dependency_overrides:
+  quiver: ^2.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^1.10.0
+  flappy_translator: ^1.2.0
+  flutter_launcher_icons: ^0.7.4
+  hive_generator: ^0.7.0+2
+  lint: ^1.1.1
+
+flappy_translator:
+  input_file_path: "locales/locales.csv"
+  output_dir: "lib"
+  file_name: "i18n"
+  class_name: "I18n"
+  delimiter: ","
+  start_index: 1
+  depend_on_context: true
+  use_single_quotes: false
+  replace_no_break_spaces: false
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/launcher/ic_launcher.png"
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/skins/default/
+    - assets/img/
+    - assets/cache.db
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: assets/fonts/Roboto-Regular.ttf
+  #       - asset: assets/fonts/Roboto-Bold.ttf
+  #   - family: VarelaRound
+  #     fonts:
+  #       - asset: assets/fonts/VarelaRound-Regular.ttf
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
