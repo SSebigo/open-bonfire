@@ -7,8 +7,7 @@ part 'store_event.dart';
 part 'store_state.dart';
 
 class StoreBloc extends Bloc<StoreEvent, StoreState> {
-  @override
-  StoreState get initialState => StoreInitial();
+  StoreBloc() : super(StoreInitial());
 
   @override
   Stream<StoreState> mapEventToState(

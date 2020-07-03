@@ -27,11 +27,10 @@ class StoreItem {
       id: data['id'] as String,
       translationKey: data['translationKey'] as String,
       price: data['price'] as int,
-      spotlightPromotionPictureUrl:
-          data['spotlightPromotionPictureUrl'] as String,
+      spotlightPromotionPictureUrl: data['spotlightPromotionPictureUrl'] as String,
       promotionPictureUrl: data['promotionPictureUrl'] as String,
       description: data['description'] as String,
-      previewPictureUrls: data['previewPictureUrls'] as List<String>,
+      previewPictureUrls: data['previewPictureUrls'].cast<String>() as List<String>,
       spotlight: data['spotlight'] as bool,
     );
   }
@@ -41,11 +40,10 @@ class StoreItem {
       id: data['id'] as String,
       translationKey: data['translationKey'] as String,
       price: data['price'] as int,
-      spotlightPromotionPictureUrl:
-          data['spotlightPromotionPictureUrl'] as String,
+      spotlightPromotionPictureUrl: data['spotlightPromotionPictureUrl'] as String,
       promotionPictureUrl: data['promotionPictureUrl'] as String,
       description: data['description'] as String,
-      previewPictureUrls: data['previewPictureUrls'] as List<String>,
+      previewPictureUrls: data['previewPictureUrls'].cast<String>() as List<String>,
       spotlight: data['spotlight'] as bool,
     );
   }

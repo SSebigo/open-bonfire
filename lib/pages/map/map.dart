@@ -1,3 +1,12 @@
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:rounded_modal/rounded_modal.dart';
+
 import 'package:bonfire/blocs/dark_mode/bloc.dart';
 import 'package:bonfire/blocs/light_bonfire/bloc.dart';
 import 'package:bonfire/blocs/map/bloc.dart';
@@ -11,14 +20,6 @@ import 'package:bonfire/routes.dart';
 import 'package:bonfire/utils/arguments.dart';
 import 'package:bonfire/utils/constants.dart';
 import 'package:bonfire/widgets/circle_button.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:logger/logger.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:rounded_modal/rounded_modal.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -27,8 +28,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final Logger logger = Logger();
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
 
   final Map<String, Bonfire> _bonfiresMap = <String, Bonfire>{};
   final Position _position = Position(latitude: 0, longitude: 0);
@@ -48,23 +48,15 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _dailyQuest =
-        _localStorageRepository?.getUserSessionData(Constants.sessionDailyQuest)
-            as Map<String, dynamic>;
-    _completed = _localStorageRepository
-        ?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
+    _dailyQuest = _localStorageRepository?.getUserSessionData(Constants.sessionDailyQuest) as Map<String, dynamic>;
+    _completed = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
 
-    _darkMode = _localStorageRepository
-        ?.getSessionConfigData(Constants.configDarkMode) as bool;
-    _isAnonymous = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
+    _darkMode = _localStorageRepository?.getSessionConfigData(Constants.configDarkMode) as bool;
+    _isAnonymous = _localStorageRepository?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
 
-    _skinUniqueName = _localStorageRepository
-            ?.getUserSessionData(Constants.sessionSkinUniqueName) as String ??
-        'base';
+    _skinUniqueName = _localStorageRepository?.getUserSessionData(Constants.sessionSkinUniqueName) as String ?? 'base';
 
-    _skin = _localStorageRepository?.getSkinData(Constants.skin)
-        as Map<String, dynamic>;
+    _skin = _localStorageRepository?.getSkinData(Constants.skin) as Map<String, dynamic>;
 
     _bottomSheetImages.addAll([
       _skin['fileIconUrl'] as String,
@@ -89,8 +81,7 @@ class _MapPageState extends State<MapPage> {
 
   void _onSymbolTapped(Symbol symbol) {
     final Bonfire bonfire = _bonfiresMap[symbol.id];
-    BlocProvider.of<MapBloc>(context)
-        .add(OnBonfireClickedEvent(bonfire: bonfire));
+    BlocProvider.of<MapBloc>(context).add(OnBonfireClickedEvent(bonfire: bonfire));
   }
 
   void _onMyProfileClicked() {
@@ -102,18 +93,14 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onLightBonfireClicked(int type) {
-    BlocProvider.of<MapBloc>(context)
-        .add(OnLightBonfireClickedEvent(type: type));
+    BlocProvider.of<MapBloc>(context).add(OnLightBonfireClickedEvent(type: type));
   }
 
   CircularProfileAvatar _buildProfileAvatar() {
-    final String pictureUrl = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionProfilePictureUrl) as String;
+    final String pictureUrl = _localStorageRepository?.getUserSessionData(Constants.sessionProfilePictureUrl) as String;
 
     return CircularProfileAvatar(
-      pictureUrl == null || pictureUrl.isEmpty
-          ? _skin['avatarIconUrl'] as String
-          : pictureUrl,
+      pictureUrl == null || pictureUrl.isEmpty ? _skin['avatarIconUrl'] as String : pictureUrl,
       radius: 20.0,
       backgroundColor: Colors.white,
       cacheImage: true,
@@ -128,18 +115,13 @@ class _MapPageState extends State<MapPage> {
         padding: const EdgeInsets.only(bottom: 40.0),
         child: Tooltip(
           message: I18n.of(context).textLightBonfire,
-          textStyle: GoogleFonts.varelaRound(
-            textStyle: TextStyle(
-              color: Colors.white,
-            ),
-          ),
+          textStyle: GoogleFonts.varelaRound(textStyle: TextStyle(color: Colors.white)),
           child: CircleButton(
             onTap: () => _showModalBottomSheet(context),
             width: 200.0 / MediaQuery.of(context).devicePixelRatio,
             height: 200.0 / MediaQuery.of(context).devicePixelRatio,
-            imagePath: _darkMode == true
-                ? _skin['circleButtonLightUrl'] as String
-                : _skin['circleButtonDarkUrl'] as String,
+            imagePath:
+                _darkMode == true ? _skin['circleButtonLightUrl'] as String : _skin['circleButtonDarkUrl'] as String,
           ),
         ),
       ),
@@ -191,10 +173,7 @@ class _MapPageState extends State<MapPage> {
                     child: Text(
                       I18n.of(context).textLightBonfire,
                       style: GoogleFonts.varelaRound(
-                        textStyle: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        textStyle: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -235,8 +214,8 @@ class _MapPageState extends State<MapPage> {
     _bonfiresMap.clear();
     for (final Bonfire bonfire in bonfires) {
       String icon;
-      final bool viewed = bonfire.viewedBy.contains(_localStorageRepository
-          .getUserSessionData(Constants.sessionUsername));
+      final bool viewed =
+          bonfire.viewedBy.contains(_localStorageRepository.getUserSessionData(Constants.sessionUsername));
       if (bonfire is ImageBonfire) {
         icon = viewed
             ? 'assets/skins/$_skinUniqueName/image-icon-viewed.png'
@@ -256,10 +235,7 @@ class _MapPageState extends State<MapPage> {
       }
       final Symbol symbol = await _mapController.addSymbol(
         SymbolOptions(
-          geometry: LatLng(
-            bonfire.position.latitude,
-            bonfire.position.longitude,
-          ),
+          geometry: LatLng(bonfire.position.latitude, bonfire.position.longitude),
           iconImage: icon,
           iconSize: 0.3,
         ),
@@ -290,9 +266,7 @@ class _MapPageState extends State<MapPage> {
     if (_dailyQuest == null) {
       return _skin['penaltyIconUrl'] as String;
     } else {
-      return _completed == true
-          ? _skin['questCompletedIconUrl'] as String
-          : _skin['questInProgressIconUrl'] as String;
+      return _completed == true ? _skin['questCompletedIconUrl'] as String : _skin['questInProgressIconUrl'] as String;
     }
   }
 
@@ -336,8 +310,7 @@ class _MapPageState extends State<MapPage> {
               BlocBuilder<DarkModeBloc, DarkModeState>(
                 builder: (context, state) {
                   if (state is InitialDarkModeState) {
-                    _darkMode = _localStorageRepository?.getSessionConfigData(
-                        Constants.configDarkMode) as bool;
+                    _darkMode = _localStorageRepository?.getSessionConfigData(Constants.configDarkMode) as bool;
                   }
                   if (state is DarkModeChanged) {
                     _darkMode = state.darkMode;
@@ -345,9 +318,7 @@ class _MapPageState extends State<MapPage> {
                   return MapboxMap(
                     onMapCreated: _onMapCreated,
                     myLocationEnabled: true,
-                    styleString: _darkMode == true
-                        ? MapboxStyles.DARK
-                        : MapboxStyles.LIGHT,
+                    styleString: _darkMode == true ? MapboxStyles.DARK : MapboxStyles.LIGHT,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(_position.latitude, _position.longitude),
                       zoom: 18.0,
@@ -356,14 +327,10 @@ class _MapPageState extends State<MapPage> {
                 },
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
                 child: Row(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15.0),
-                      child: _buildProfileAvatar(),
-                    ),
+                    Padding(padding: const EdgeInsets.only(right: 15.0), child: _buildProfileAvatar()),
                   ],
                 ),
               ),
@@ -380,20 +347,15 @@ class _MapPageState extends State<MapPage> {
                       builder: (context, lightBonfireState) {
                         if (lightBonfireState is DailyQuestCompleted) {
                           _completed =
-                              _localStorageRepository?.getDailyQuestData(
-                                  Constants.dailyQuestCompleted) as bool;
+                              _localStorageRepository?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
                         }
                         return BlocBuilder<SplashBloc, SplashState>(
                           builder: (context, splashState) {
-                            if (splashState
-                                is STEBackgroundTaskDailyQuestOrPenaltyUpdated) {
-                              _dailyQuest =
-                                  _localStorageRepository?.getUserSessionData(
-                                          Constants.sessionDailyQuest)
-                                      as Map<String, dynamic>;
+                            if (splashState is STEBackgroundTaskDailyQuestOrPenaltyUpdated) {
+                              _dailyQuest = _localStorageRepository?.getUserSessionData(Constants.sessionDailyQuest)
+                                  as Map<String, dynamic>;
                               _completed =
-                                  _localStorageRepository?.getDailyQuestData(
-                                      Constants.dailyQuestCompleted) as bool;
+                                  _localStorageRepository?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
                             }
                             return DailyQuestPenaltyButton(
                               height: 50.0,

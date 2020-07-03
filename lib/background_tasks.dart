@@ -8,22 +8,17 @@ import 'package:time/time.dart';
 
 class BackgroundTask {
   final UserDataRepository _userDataRepository = UserDataRepository();
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   final DailyQuestRepository _dailyQuestRepository = DailyQuestRepository();
   final PenaltyRepository _penaltyRepository = PenaltyRepository();
 
   Future<void> updateDailyQuestOrPenalty() async {
     // NOTE: check if session daily quest or penalty set
     final Map<String, dynamic> dailyQuest = _localStorageRepository
-        ?.getUserSessionData(
-          Constants.sessionDailyQuest,
-        )
+        ?.getUserSessionData(Constants.sessionDailyQuest)
         ?.cast<String, dynamic>() as Map<String, dynamic>;
     final Map<String, dynamic> penalty = _localStorageRepository
-        ?.getUserSessionData(
-          Constants.sessionPenalty,
-        )
+        ?.getUserSessionData(Constants.sessionPenalty)
         ?.cast<String, dynamic>() as Map<String, dynamic>;
 
     // NOTE: check if user already ahd daily quest or penalty in progress
@@ -41,17 +36,13 @@ class BackgroundTask {
           }
         } else {
           await Future.wait([
-            _dailyQuestRepository?.updateDailyQuestById(
-                dailyQuest['bonfireToLit'] as int,
-                dailyQuest['completed'] as bool,
-                dailyQuest['deadline'] as int,
-                dailyQuest['id'] as String),
+            _dailyQuestRepository?.updateDailyQuestById(dailyQuest['bonfireToLit'] as int,
+                dailyQuest['completed'] as bool, dailyQuest['deadline'] as int, dailyQuest['id'] as String),
             _penaltyRepository?.nullifyPenalty(),
             _userDataRepository?.nullifyPenalty(),
           ]);
 
-          final DateTime deadline = DateTime.fromMillisecondsSinceEpoch(
-              dailyQuest['deadline'] as int);
+          final DateTime deadline = DateTime.fromMillisecondsSinceEpoch(dailyQuest['deadline'] as int);
           final DateTime now = DateTime.now();
           final Duration difference = deadline.difference(now);
 
@@ -68,14 +59,12 @@ class BackgroundTask {
           await _updateDailyQuest();
         } else {
           await Future.wait([
-            _penaltyRepository?.updatePenaltyById(
-                penalty['deadline'] as int, penalty['id'] as String),
+            _penaltyRepository?.updatePenaltyById(penalty['deadline'] as int, penalty['id'] as String),
             _dailyQuestRepository?.nullifyDailyQuest(),
             _userDataRepository?.nullifyDailyQuest(),
           ]);
 
-          final DateTime dtDeadline =
-              DateTime.fromMillisecondsSinceEpoch(deadline);
+          final DateTime dtDeadline = DateTime.fromMillisecondsSinceEpoch(deadline);
           final DateTime now = DateTime.now();
           final Duration difference = dtDeadline.difference(now);
 
@@ -98,19 +87,14 @@ class BackgroundTask {
       _penaltyRepository?.nullifyPenalty(),
     ]);
 
-    final int bonfireToLit = _localStorageRepository
-        ?.getDailyQuestData(Constants.dailyQuestBonfireToLit) as int;
-    final bool completed = _localStorageRepository
-        ?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
-    final String dailyQuestId = _localStorageRepository
-        ?.getDailyQuestData(Constants.dailyQuestId) as String;
-    final int deadline = _localStorageRepository
-        ?.getDailyQuestData(Constants.dailyQuestDeadline) as int;
+    final int bonfireToLit = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestBonfireToLit) as int;
+    final bool completed = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
+    final String dailyQuestId = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestId) as String;
+    final int deadline = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestDeadline) as int;
 
     // NOTE: send new daily quest data to user account in database
     await Future.wait([
-      _userDataRepository?.updateDailyQuest(
-          bonfireToLit, completed, dailyQuestId, deadline),
+      _userDataRepository?.updateDailyQuest(bonfireToLit, completed, dailyQuestId, deadline),
       _userDataRepository?.nullifyPenalty(),
       _userDataRepository?.zerofyAllBonfireTypesCount(),
     ]);
@@ -129,10 +113,8 @@ class BackgroundTask {
       _dailyQuestRepository?.nullifyDailyQuest(),
     ]);
 
-    final String penaltyId =
-        _localStorageRepository?.getPenaltyData(Constants.penaltyId) as String;
-    final int deadline = _localStorageRepository
-        ?.getPenaltyData(Constants.penaltyDeadline) as int;
+    final String penaltyId = _localStorageRepository?.getPenaltyData(Constants.penaltyId) as String;
+    final int deadline = _localStorageRepository?.getPenaltyData(Constants.penaltyDeadline) as int;
 
     // NOTE: send new penalty data to user account in database
     await Future.wait([

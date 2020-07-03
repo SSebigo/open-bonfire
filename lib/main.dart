@@ -14,25 +14,23 @@ import 'package:bonfire/blocs/splash/splash_event.dart';
 import 'package:bonfire/pages/store/bloc/store_bloc.dart';
 import 'package:bonfire/repositories/local_storage_repository.dart';
 import 'package:bonfire/routes.dart';
-import 'package:bonfire/simple_bloc_delegate.dart';
+import 'package:bonfire/simple_bloc_observer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   await _localStorageRepository?.initLocalStorageService();
 
   createRoutes();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<SplashBloc>(
-        create: (BuildContext context) =>
-            SplashBloc()..add(EVTOnRequestPermissions()),
+        create: (BuildContext context) => SplashBloc()..add(EVTOnRequestPermissions()),
       ),
       BlocProvider<AuthBloc>(
         create: (BuildContext context) => AuthBloc(),
@@ -47,8 +45,7 @@ Future<void> main() async {
         create: (BuildContext context) => StoreBloc(),
       ),
       BlocProvider<MapBloc>(
-        create: (BuildContext context) =>
-            MapBloc()..add(OnFetchPositionEvent()),
+        create: (BuildContext context) => MapBloc()..add(OnFetchPositionEvent()),
       ),
       BlocProvider<LightBonfireBloc>(
         create: (BuildContext context) => LightBonfireBloc(),

@@ -22,7 +22,7 @@ class BonfireUserDetails {
       level: data['level'] as int,
       photoUrl: data['photoUrl'] as String,
       name: data['name'] as String,
-      trophies: data['trophies'] as List<String>,
+      trophies: data['trophies'].cast<String>() as List<String>,
       uid: data['uid'] as String,
       username: data['username'] as String,
     );

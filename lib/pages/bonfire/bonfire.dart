@@ -26,10 +26,8 @@ class BonfirePage extends StatefulWidget {
   _BonfirePageState createState() => _BonfirePageState();
 }
 
-class _BonfirePageState extends State<BonfirePage>
-    with SingleTickerProviderStateMixin {
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+class _BonfirePageState extends State<BonfirePage> with SingleTickerProviderStateMixin {
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
 
   String _sessionUid;
 
@@ -41,25 +39,19 @@ class _BonfirePageState extends State<BonfirePage>
 
   @override
   void initState() {
-    _sessionUid = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionUid) as String;
+    _sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
 
-    _skin = _localStorageRepository?.getSkinData(Constants.skin)
-        as Map<String, dynamic>;
+    _skin = _localStorageRepository?.getSkinData(Constants.skin) as Map<String, dynamic>;
 
     if (_sessionUid == widget.args.bonfire.authorUid) {
-      final int sessionExperience = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionExperience) as int;
-      final int sessionLevel = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionLevel) as int;
-      final String sessionProfilePictureUrl = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionProfilePictureUrl) as String;
-      final String sessionName = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionName) as String;
-      final String sessionUsername = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionUsername) as String;
-      final List<String> sessionTrophies = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionTrophies) as List<String>;
+      final int sessionExperience = _localStorageRepository?.getUserSessionData(Constants.sessionExperience) as int;
+      final int sessionLevel = _localStorageRepository?.getUserSessionData(Constants.sessionLevel) as int;
+      final String sessionProfilePictureUrl =
+          _localStorageRepository?.getUserSessionData(Constants.sessionProfilePictureUrl) as String;
+      final String sessionName = _localStorageRepository?.getUserSessionData(Constants.sessionName) as String;
+      final String sessionUsername = _localStorageRepository?.getUserSessionData(Constants.sessionUsername) as String;
+      final List<String> sessionTrophies =
+          _localStorageRepository?.getUserSessionData(Constants.sessionTrophies)?.cast<String>() as List<String>;
 
       _userDetails = BonfireUserDetails(
         experience: sessionExperience,
@@ -86,8 +78,7 @@ class _BonfirePageState extends State<BonfirePage>
       ));
     }
 
-    _sessionIsAnonymous = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
+    _sessionIsAnonymous = _localStorageRepository?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
 
     super.initState();
   }
@@ -123,8 +114,8 @@ class _BonfirePageState extends State<BonfirePage>
   }
 
   bool _isCurrentUserAlreadyFollowingBonfireAuthor() {
-    final List<String> following = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionFollowing) as List<String>;
+    final List<String> following =
+        _localStorageRepository?.getUserSessionData(Constants.sessionFollowing)?.cast<String>() as List<String>;
     return following?.contains(_userDetails.uid) ?? false;
   }
 
@@ -158,9 +149,7 @@ class _BonfirePageState extends State<BonfirePage>
     } else if (state is STEFollowingRemoved) {
       return _followBonfireAuthor;
     }
-    return _isCurrentUserAlreadyFollowingBonfireAuthor()
-        ? _unfollowBonfireAuthor
-        : _followBonfireAuthor;
+    return _isCurrentUserAlreadyFollowingBonfireAuthor() ? _unfollowBonfireAuthor : _followBonfireAuthor;
   }
 
   Color _getFollowingButtonColor(BonfireState state) {
@@ -169,9 +158,7 @@ class _BonfirePageState extends State<BonfirePage>
     } else if (state is STEFollowingRemoved) {
       return PaletteOne.colorOne;
     }
-    return _isCurrentUserAlreadyFollowingBonfireAuthor()
-        ? Theme.of(context).primaryColor
-        : PaletteOne.colorOne;
+    return _isCurrentUserAlreadyFollowingBonfireAuthor() ? Theme.of(context).primaryColor : PaletteOne.colorOne;
   }
 
   bool _getIsFollowing(BonfireState state) {
@@ -194,9 +181,7 @@ class _BonfirePageState extends State<BonfirePage>
             onPressed: _getFollowingMethod(state),
             buttonColor: _getFollowingButtonColor(state),
             width: 300.0,
-            height: _sessionIsAnonymous == true ||
-                    _isCurrentUser() == true ||
-                    _isAnonymousBonfire() == true
+            height: _sessionIsAnonymous == true || _isCurrentUser() == true || _isAnonymousBonfire() == true
                 ? 325.0
                 : 400.0,
             isAnonymous: _sessionIsAnonymous || _isAnonymousBonfire(),
@@ -274,8 +259,7 @@ class _BonfirePageState extends State<BonfirePage>
                   ),
                 ),
                 BonfireRatingButton(
-                  onPressed: () =>
-                      _onBonfireDislikeClicked(widget.args.bonfire),
+                  onPressed: () => _onBonfireDislikeClicked(widget.args.bonfire),
                   imagePath: _skin['dislikeIconUrl'] as String,
                   ratings: widget.args.bonfire.dislikes,
                   color: Colors.redAccent,
@@ -326,8 +310,7 @@ class _BonfirePageState extends State<BonfirePage>
               Flushbar(
                 message: I18n.of(context).textFileDownloaded,
                 duration: const Duration(seconds: 3),
-                icon:
-                    Icon(Icons.check_circle_outline, color: Colors.greenAccent),
+                icon: Icon(Icons.check_circle_outline, color: Colors.greenAccent),
                 flushbarStyle: FlushbarStyle.FLOATING,
                 margin: const EdgeInsets.all(8),
                 borderRadius: 8,
@@ -370,9 +353,7 @@ class _BonfirePageState extends State<BonfirePage>
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: _sessionIsAnonymous == true
-                        ? Container()
-                        : _buildRatingView(),
+                    child: _sessionIsAnonymous == true ? Container() : _buildRatingView(),
                   ),
                 ],
               );

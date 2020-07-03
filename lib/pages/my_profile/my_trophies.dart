@@ -15,8 +15,7 @@ class MyTrophiesPage extends StatefulWidget {
 }
 
 class _MyTrophiesPageState extends State<MyTrophiesPage> {
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
 
   List<Trophy> _trophies;
   List<String> _sessionTrophies;
@@ -26,13 +25,11 @@ class _MyTrophiesPageState extends State<MyTrophiesPage> {
   @override
   void initState() {
     super.initState();
-    _trophies = _localStorageRepository?.getTrophiesData(Constants.trophies)
-        as List<Trophy>;
-    _sessionTrophies = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionTrophies) as List<String>;
+    _trophies = _localStorageRepository?.getTrophiesData(Constants.trophies)?.cast<Trophy>() as List<Trophy>;
+    _sessionTrophies =
+        _localStorageRepository?.getUserSessionData(Constants.sessionTrophies)?.cast<String>() as List<String>;
 
-    _locale = _localStorageRepository
-        ?.getSessionConfigData(Constants.configLocale) as String;
+    _locale = _localStorageRepository?.getSessionConfigData(Constants.configLocale) as String;
   }
 
   List<StaggeredTile> _generateStaggeredTiles() {

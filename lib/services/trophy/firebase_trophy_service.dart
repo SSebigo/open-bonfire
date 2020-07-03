@@ -8,12 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseTrophyService extends BaseTrophyService {
   final Firestore _firestore = Firestore.instance;
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   final TrophyProgress _trophyProgress = TrophyProgress();
 
-  static final FirebaseTrophyService _singleton =
-      FirebaseTrophyService._internal();
+  static final FirebaseTrophyService _singleton = FirebaseTrophyService._internal();
 
   FirebaseTrophyService._internal();
 
@@ -21,29 +19,25 @@ class FirebaseTrophyService extends BaseTrophyService {
 
   @override
   Future<List<Trophy>> getTrophies() async {
-    final CollectionReference trophiesReference =
-        _firestore.collection(Paths.trophiesPath);
+    final CollectionReference trophiesReference = _firestore.collection(Paths.trophiesPath);
     final querySnapshot = await trophiesReference.getDocuments();
 
     final List<Trophy> trophies = <Trophy>[];
-    querySnapshot.documents
-        .forEach((doc) => trophies.add(Trophy.fromFirestore(doc)));
+    querySnapshot.documents.forEach((doc) => trophies.add(Trophy.fromFirestore(doc)));
     return trophies;
   }
 
   @override
   Future<void> updateTrophyProgress() async {
-    final List<Trophy> trophies = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionMissingTrophies) as List<Trophy>;
+    final List<Trophy> trophies =
+        _localStorageRepository?.getUserSessionData(Constants.sessionMissingTrophies)?.cast<Trophy>() as List<Trophy>;
 
-    final int fileBonfireCount = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionFileBonfireCount) as int;
-    final int imageBonfireCount = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionImageBonfireCount) as int;
-    final int textBonfireCount = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionTextBonfireCount) as int;
-    final int videoBonfireCount = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionVideoBonfireCount) as int;
+    final int fileBonfireCount = _localStorageRepository?.getUserSessionData(Constants.sessionFileBonfireCount) as int;
+    final int imageBonfireCount =
+        _localStorageRepository?.getUserSessionData(Constants.sessionImageBonfireCount) as int;
+    final int textBonfireCount = _localStorageRepository?.getUserSessionData(Constants.sessionTextBonfireCount) as int;
+    final int videoBonfireCount =
+        _localStorageRepository?.getUserSessionData(Constants.sessionVideoBonfireCount) as int;
 
     for (final Trophy trophy in trophies) {
       switch (trophy.uniqueName) {

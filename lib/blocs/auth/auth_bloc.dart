@@ -15,32 +15,27 @@ import './bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final Logger logger = Logger();
-  final AuthenticationRepository _authenticationRepository =
-      AuthenticationRepository();
+
+  final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
   final UserDataRepository _userDataRepository = UserDataRepository();
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   final LocalSkinRepository _localSkinRepository = LocalSkinRepository();
   final OnlineSkinRepository _onlineSkinRepository = OnlineSkinRepository();
   final BackgroundTask _backgroundTask = BackgroundTask();
 
-  @override
-  AuthState get initialState => InitialAuthState();
+  AuthBloc() : super(InitialAuthState());
 
   @override
-  Stream<AuthState> mapEventToState(
-    AuthEvent event,
-  ) async* {
+  Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is OnSignInAnonymouslyClicked) {
       yield SigningInAnonymously();
       try {
         await _authenticationRepository?.signInAnonymously();
 
-        final String skinUniqueName = _localStorageRepository
-            ?.getUserSessionData(Constants.sessionSkinUniqueName) as String;
+        final String skinUniqueName =
+            _localStorageRepository?.getUserSessionData(Constants.sessionSkinUniqueName) as String;
 
-        final Skin skinDetails =
-            await _onlineSkinRepository?.getSkinDetails(skinUniqueName);
+        final Skin skinDetails = await _onlineSkinRepository?.getSkinDetails(skinUniqueName);
 
         await _localSkinRepository?.updateSkin(skinDetails);
 
@@ -55,13 +50,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     if (event is OnPasswordChanged) {
       yield TextFieldChangedState();
-      yield PasswordValidityState(
-          isPasswordValid: Validators.password(event.password));
+      yield PasswordValidityState(isPasswordValid: Validators.password(event.password));
     }
     if (event is OnConfirmPasswordChanged) {
       yield TextFieldChangedState();
-      yield ConfirmPasswordValidityState(
-          isConfirmPasswordValid: event.confirmPassword == event.password);
+      yield ConfirmPasswordValidityState(isConfirmPasswordValid: event.confirmPassword == event.password);
     }
     if (event is OnSignInClicked) {
       yield* _mapOnSignInClickedToState(event);
@@ -93,20 +86,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async* {
     yield LoggingInState();
     try {
-      await _authenticationRepository?.signInWithEmail(
-          event.email, event.password);
+      await _authenticationRepository?.signInWithEmail(event.email, event.password);
 
-      final String skinUniqueName = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionSkinUniqueName) as String;
+      final String skinUniqueName =
+          _localStorageRepository?.getUserSessionData(Constants.sessionSkinUniqueName) as String;
 
-      final Skin skinDetails =
-          await _onlineSkinRepository?.getSkinDetails(skinUniqueName);
+      final Skin skinDetails = await _onlineSkinRepository?.getSkinDetails(skinUniqueName);
 
       await _localSkinRepository?.updateSkin(skinDetails);
 
-      final bool isProfileComplete =
-          await _userDataRepository?.isProfileComplete();
-      if (isProfileComplete == true) {
+      final bool isProfileComplete = await _userDataRepository?.isProfileComplete();
+      if (isProfileComplete) {
         await _backgroundTask.updateDailyQuestOrPenalty();
         yield NavigateToMapState();
       } else {
@@ -120,15 +110,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapOnSignUpClickedToState(
     OnSignUpClicked event,
   ) async* {
-    final bool isAnonymous = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
-    yield isAnonymous != null && isAnonymous
-        ? ConvertingAccountState()
-        : SendingMailState();
+    final bool isAnonymous = _localStorageRepository?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
+    yield isAnonymous != null && isAnonymous ? ConvertingAccountState() : SendingMailState();
     if (isAnonymous != null && isAnonymous) {
       try {
-        final FirebaseUser firebaseUser = await _authenticationRepository
-            .convertUserWithEmail(event.email, event.password);
+        final FirebaseUser firebaseUser =
+            await _authenticationRepository.convertUserWithEmail(event.email, event.password);
         await _userDataRepository?.saveDetailsFromAuth(firebaseUser);
         yield AccountConvertedState();
       } catch (error) {
@@ -136,8 +123,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } else {
       try {
-        final FirebaseUser firebaseUser = await _authenticationRepository
-            .signUpWithEmail(event.email, event.password);
+        final FirebaseUser firebaseUser = await _authenticationRepository.signUpWithEmail(event.email, event.password);
         await _userDataRepository?.saveDetailsFromAuth(firebaseUser);
         yield SendMailSuccessState();
       } catch (error) {

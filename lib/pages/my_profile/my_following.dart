@@ -13,23 +13,19 @@ class MyFollowingPage extends StatefulWidget {
 }
 
 class _MyFollowingPageState extends State<MyFollowingPage> {
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
 
   Map<String, dynamic> _skin;
 
   @override
   void initState() {
-    _skin = _localStorageRepository?.getSkinData(Constants.skin)
-        as Map<String, dynamic>;
-
-    final List<String> following = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionFollowing) as List<String>;
-
-    BlocProvider.of<MyProfileBloc>(context)
-        .add(EVTOnFetchFollowingDetails(following: following));
-
     super.initState();
+    _skin = _localStorageRepository?.getSkinData(Constants.skin) as Map<String, dynamic>;
+
+    final List<String> following =
+        _localStorageRepository?.getUserSessionData(Constants.sessionFollowing)?.cast<String>() as List<String>;
+
+    BlocProvider.of<MyProfileBloc>(context).add(EVTOnFetchFollowingDetails(following: following));
   }
 
   void _goBack() {
@@ -38,9 +34,7 @@ class _MyFollowingPageState extends State<MyFollowingPage> {
 
   Widget _buildProfileAvatar(String profilePictureUrl) {
     return CircularProfileAvatar(
-      profilePictureUrl == null || profilePictureUrl == ''
-          ? _skin['avatarIconUrl'] as String
-          : profilePictureUrl,
+      profilePictureUrl == null || profilePictureUrl == '' ? _skin['avatarIconUrl'] as String : profilePictureUrl,
       radius: 25.0,
       backgroundColor: Colors.white,
       cacheImage: true,
@@ -48,8 +42,7 @@ class _MyFollowingPageState extends State<MyFollowingPage> {
   }
 
   void _unfollow(String unfollowingUid) {
-    BlocProvider.of<MyProfileBloc>(context)
-        .add(EVTOnUnfollowClicked(unfollowingUid: unfollowingUid));
+    BlocProvider.of<MyProfileBloc>(context).add(EVTOnUnfollowClicked(unfollowingUid: unfollowingUid));
   }
 
   @override
@@ -99,8 +92,7 @@ class _MyFollowingPageState extends State<MyFollowingPage> {
                         itemCount: state.following.length,
                         itemBuilder: (_, int idx) {
                           return ListTile(
-                            leading: _buildProfileAvatar(
-                                state.following[idx].photoUrl),
+                            leading: _buildProfileAvatar(state.following[idx].photoUrl),
                             title: Text(
                               state.following[idx].name,
                               style: GoogleFonts.varelaRound(
@@ -126,8 +118,7 @@ class _MyFollowingPageState extends State<MyFollowingPage> {
                                 ),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-                              onPressed: () =>
-                                  _unfollow(state.following[idx].uid),
+                              onPressed: () => _unfollow(state.following[idx].uid),
                               child: Text(
                                 I18n.of(context).textFollowing,
                                 style: GoogleFonts.varelaRound(
@@ -159,8 +150,7 @@ class _MyFollowingPageState extends State<MyFollowingPage> {
                         itemCount: state.following.length,
                         itemBuilder: (_, int idx) {
                           return ListTile(
-                            leading: _buildProfileAvatar(
-                                state.following[idx].photoUrl),
+                            leading: _buildProfileAvatar(state.following[idx].photoUrl),
                             title: Text(
                               state.following[idx].name,
                               style: GoogleFonts.varelaRound(
@@ -186,8 +176,7 @@ class _MyFollowingPageState extends State<MyFollowingPage> {
                                 ),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-                              onPressed: () =>
-                                  _unfollow(state.following[idx].uid),
+                              onPressed: () => _unfollow(state.following[idx].uid),
                               child: Text(
                                 I18n.of(context).textFollowing,
                                 style: GoogleFonts.varelaRound(

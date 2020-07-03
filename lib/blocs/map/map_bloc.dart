@@ -12,23 +12,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   final Logger logger = Logger();
 
   Geolocator geolocator = Geolocator();
-  final LocationOptions _locationOptions =
-      LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 25);
+  final LocationOptions _locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 25);
 
   StreamSubscription<Position> _positionStream;
   StreamSubscription<List<Bonfire>> _bonfireSubscription;
   final BonfireRepository _bonfireRepository = BonfireRepository();
 
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
+
+  MapBloc() : super(InitialMapState());
 
   @override
-  MapState get initialState => InitialMapState();
-
-  @override
-  Stream<MapState> mapEventToState(
-    MapEvent event,
-  ) async* {
+  Stream<MapState> mapEventToState(MapEvent event) async* {
     if (event is OnFetchPositionEvent) {
       yield* _mapFetchPositionToState();
     }
@@ -52,33 +47,30 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Stream<MapState> _mapFetchPositionToState() async* {
     try {
       _positionStream?.cancel();
-      _positionStream = geolocator.getPositionStream(_locationOptions).listen(
-          (Position position) =>
-              add(OnReceivedPositionEvent(position: position)));
+      _positionStream = geolocator
+          .getPositionStream(_locationOptions)
+          .listen((Position position) => add(OnReceivedPositionEvent(position: position)));
     } catch (error) {
       yield MapErrorState(error: error);
     }
   }
 
-  Stream<MapState> _mapFetchBonfiresEventToState(
-      OnFetchBonfiresEvent event) async* {
+  Stream<MapState> _mapFetchBonfiresEventToState(OnFetchBonfiresEvent event) async* {
     yield FetchingBonfiresState();
     try {
-      final Position position = await geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
+      final Position position =
+          await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 
       _bonfireSubscription?.cancel();
       _bonfireSubscription = _bonfireRepository
           .getBonfires(position, 0.05)
-          .listen(
-              (bonfires) => add(OnReceivedBonfiresEvent(bonfires: bonfires)));
+          .listen((bonfires) => add(OnReceivedBonfiresEvent(bonfires: bonfires)));
     } catch (error) {
       yield MapErrorState(error: error);
     }
   }
 
-  Stream<MapState> _mapReceivedBonfiresEventToState(
-      OnReceivedBonfiresEvent event) async* {
+  Stream<MapState> _mapReceivedBonfiresEventToState(OnReceivedBonfiresEvent event) async* {
     try {
       final int now = DateTime.now().millisecondsSinceEpoch;
       event.bonfires.forEach((bonfire) {
@@ -94,8 +86,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  Stream<MapState> _mapOnLightBonfireEventToState(
-      OnLightBonfireClickedEvent event) async* {
+  Stream<MapState> _mapOnLightBonfireEventToState(OnLightBonfireClickedEvent event) async* {
     yield NavigatingState();
     switch (event.type) {
       case 0:
@@ -117,18 +108,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  Stream<MapState> _mapOnBonfireClickedEventToState(
-      OnBonfireClickedEvent event) async* {
+  Stream<MapState> _mapOnBonfireClickedEventToState(OnBonfireClickedEvent event) async* {
     yield SittingByTheFireState();
     try {
-      if (!event.bonfire.viewedBy.contains(_localStorageRepository
-          .getUserSessionData(Constants.sessionUsername))) {
+      if (!event.bonfire.viewedBy.contains(_localStorageRepository.getUserSessionData(Constants.sessionUsername))) {
         final List<String> viewedBy = List<String>.from(event.bonfire.viewedBy);
 
-        viewedBy.add(_localStorageRepository
-            ?.getUserSessionData(Constants.sessionUsername) as String);
-        await _bonfireRepository?.updateBonfireViewedBy(
-            event.bonfire.id, viewedBy);
+        viewedBy.add(_localStorageRepository?.getUserSessionData(Constants.sessionUsername) as String);
+        await _bonfireRepository?.updateBonfireViewedBy(event.bonfire.id, viewedBy);
 
         event.bonfire.viewedBy = List<String>.from(viewedBy);
       }

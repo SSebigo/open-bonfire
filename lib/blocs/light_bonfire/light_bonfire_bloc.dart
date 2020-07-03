@@ -17,21 +17,16 @@ import './bloc.dart';
 class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
   final Geoflutterfire geo = Geoflutterfire();
   final BonfireRepository _bonfireRepository = BonfireRepository();
-  final OnlineStorageRepository _onlineStorageRepository =
-      OnlineStorageRepository();
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final OnlineStorageRepository _onlineStorageRepository = OnlineStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   final UserDataRepository _userDataRepository = UserDataRepository();
   final DailyQuestRepository _dailyQuestRepository = DailyQuestRepository();
   final TrophyRepository _trophyRepository = TrophyRepository();
 
-  @override
-  LightBonfireState get initialState => InitialLightBonfireState();
+  LightBonfireBloc() : super(InitialLightBonfireState());
 
   @override
-  Stream<LightBonfireState> mapEventToState(
-    LightBonfireEvent event,
-  ) async* {
+  Stream<LightBonfireState> mapEventToState(LightBonfireEvent event) async* {
     if (event is OnLightBonfireFileClicked) {
       yield* _mapOnLightBonfireFileToState(event);
     }
@@ -55,16 +50,14 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
     }
   }
 
-  Stream<LightBonfireState> _mapOnLightBonfireFileToState(
-      OnLightBonfireFileClicked event) async* {
+  Stream<LightBonfireState> _mapOnLightBonfireFileToState(OnLightBonfireFileClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position = await Geolocator().getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String url = await _onlineStorageRepository?.uploadFile(event.file,
-          Paths.getAttachmentsPathByFileType(event.fileType) as String);
-      final String sessionUid = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionUid) as String;
+      final Position position =
+          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      final String url =
+          await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
+      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
 
       final Bonfire bonfire = FileBonfire(
         fileUrl: url,
@@ -100,16 +93,14 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
     }
   }
 
-  Stream<LightBonfireState> _mapOnLightBonfireImageToState(
-      OnLightBonfireImageClicked event) async* {
+  Stream<LightBonfireState> _mapOnLightBonfireImageToState(OnLightBonfireImageClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position = await Geolocator().getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String url = await _onlineStorageRepository?.uploadFile(event.file,
-          Paths.getAttachmentsPathByFileType(event.fileType) as String);
-      final String sessionUid = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionUid) as String;
+      final Position position =
+          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      final String url =
+          await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
+      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
 
       final Bonfire bonfire = ImageBonfire(
         imageUrl: url,
@@ -142,14 +133,12 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
     }
   }
 
-  Stream<LightBonfireState> _mapOnLightBonfireTextToState(
-      OnLightBonfireTextClicked event) async* {
+  Stream<LightBonfireState> _mapOnLightBonfireTextToState(OnLightBonfireTextClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position = await Geolocator().getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String sessionUid = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionUid) as String;
+      final Position position =
+          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
       final Bonfire bonfire = TextBonfire(
         text: event.text.trim(),
         id: '',
@@ -182,16 +171,14 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
     }
   }
 
-  Stream<LightBonfireState> _mapOnLightBonfireVideoToState(
-      OnLightBonfireVideoClicked event) async* {
+  Stream<LightBonfireState> _mapOnLightBonfireVideoToState(OnLightBonfireVideoClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position = await Geolocator().getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String url = await _onlineStorageRepository?.uploadFile(event.file,
-          Paths.getAttachmentsPathByFileType(event.fileType) as String);
-      final String sessionUid = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionUid) as String;
+      final Position position =
+          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      final String url =
+          await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
+      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
       final Bonfire bonfire = VideoBonfire(
         videoUrl: url,
         description: event.description.trim(),
@@ -224,8 +211,7 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
   }
 
   Stream<LightBonfireState> _updateUserExperienceAndLevel() async* {
-    bool dailyQuestCompleted = _localStorageRepository
-        ?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
+    bool dailyQuestCompleted = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
 
     int experience = 1;
 
@@ -234,33 +220,28 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
       await _dailyQuestRepository?.updateDailyQuestProgress();
 
       // NOTE: update user daily quest if daily quest completed
-      dailyQuestCompleted = _localStorageRepository
-          ?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
+      dailyQuestCompleted = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
 
       if (dailyQuestCompleted == true) {
         await _userDataRepository?.updateDailyQuestStatus(dailyQuestCompleted);
         yield DailyQuestCompleted();
 
-        final int dailyQuestExperience = _localStorageRepository
-            ?.getDailyQuestData(Constants.dailyQuestExperience) as int;
+        final int dailyQuestExperience =
+            _localStorageRepository?.getDailyQuestData(Constants.dailyQuestExperience) as int;
 
         experience += dailyQuestExperience;
       }
     }
 
-    final int currentUserExperience = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionExperience) as int;
+    final int currentUserExperience = _localStorageRepository?.getUserSessionData(Constants.sessionExperience) as int;
 
-    await _userDataRepository
-        ?.updateExperience(currentUserExperience + experience);
+    await _userDataRepository?.updateExperience(currentUserExperience + experience);
 
     // NOTE: if experince > nextLevelExperience, update level and nextLevelExperience
-    final bool updateLevel = _localStorageRepository
-        ?.getUserSessionData(Constants.sessionUpdateUserLevel) as bool;
+    final bool updateLevel = _localStorageRepository?.getUserSessionData(Constants.sessionUpdateUserLevel) as bool;
 
     if (updateLevel == true) {
-      final int currentUserLevel = _localStorageRepository
-          ?.getUserSessionData(Constants.sessionLevel) as int;
+      final int currentUserLevel = _localStorageRepository?.getUserSessionData(Constants.sessionLevel) as int;
 
       await Future.wait([
         _userDataRepository?.updateLevel(currentUserLevel + 1),

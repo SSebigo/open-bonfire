@@ -13,32 +13,25 @@ import 'package:password/password.dart';
 import './bloc.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  final AuthenticationRepository _authenticationRepository =
-      AuthenticationRepository();
+  final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
   final UserDataRepository _userDataRepository = UserDataRepository();
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
+
+  SettingsBloc() : super(InitialSettingsState());
 
   @override
-  SettingsState get initialState => InitialSettingsState();
-
-  @override
-  Stream<SettingsState> mapEventToState(
-    SettingsEvent event,
-  ) async* {
+  Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is OnNameChanged) {
       yield TextFieldChangedState();
       yield NameValidityState(isNameValid: Validators.name(event.name));
     }
     if (event is OnEmailChanged) {
       yield TextFieldChangedState();
-      yield EmailValidityState(
-          isEmailValid: Validators.email(event.email));
+      yield EmailValidityState(isEmailValid: Validators.email(event.email));
     }
     if (event is OnPasswordChanged) {
       yield TextFieldChangedState();
-      yield PasswordValidityState(
-          isPasswordValid: Validators.password(event.password));
+      yield PasswordValidityState(isPasswordValid: Validators.password(event.password));
     }
     if (event is OnModifyNameClicked) {
       yield* _mapOnModifyNameClickedToState(event);
@@ -60,15 +53,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  Stream<SettingsState> _mapOnModifyNameClickedToState(
-      OnModifyNameClicked event) async* {
+  Stream<SettingsState> _mapOnModifyNameClickedToState(OnModifyNameClicked event) async* {
     yield ModifyingFieldState();
     try {
       if (event.password.isEmpty ||
           !Password.verify(
             event.password,
-            _localStorageRepository
-                ?.getUserSessionData(Constants.sessionPassword) as String,
+            _localStorageRepository?.getUserSessionData(Constants.sessionPassword) as String,
           )) {
         throw InvalidPasswordException(event.errorMessage);
       } else {
@@ -80,15 +71,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  Stream<SettingsState> _mapOnModifyEmailClickedToState(
-      OnModifyEmailClicked event) async* {
+  Stream<SettingsState> _mapOnModifyEmailClickedToState(OnModifyEmailClicked event) async* {
     yield ModifyingFieldState();
     try {
       if (event.password.isEmpty ||
           !Password.verify(
             event.password,
-            _localStorageRepository
-                ?.getUserSessionData(Constants.sessionPassword) as String,
+            _localStorageRepository?.getUserSessionData(Constants.sessionPassword) as String,
           )) {
         throw InvalidPasswordException(event.errorMessage);
       } else {
@@ -100,15 +89,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  Stream<SettingsState> _mapOnModifyPasswordClickedToState(
-      OnModifyPasswordClicked event) async* {
+  Stream<SettingsState> _mapOnModifyPasswordClickedToState(OnModifyPasswordClicked event) async* {
     yield ModifyingFieldState();
     try {
       if (event.currentPassword.isEmpty ||
           !Password.verify(
             event.currentPassword,
-            _localStorageRepository
-                ?.getUserSessionData(Constants.sessionPassword) as String,
+            _localStorageRepository?.getUserSessionData(Constants.sessionPassword) as String,
           )) {
         throw InvalidPasswordException(event.errorMessage);
       } else {
@@ -120,8 +107,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  Stream<SettingsState> _mapOnReportProblemClickedToState(
-      OnReportProblemClicked event) async* {
+  Stream<SettingsState> _mapOnReportProblemClickedToState(OnReportProblemClicked event) async* {
     yield ReportingProblemState();
     try {
       final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -132,8 +118,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       final String os = Platform.isAndroid ? 'Android' : 'IOS';
 
-      final String body =
-          'User: ${_localStorageRepository?.getUserSessionData(Constants.sessionUsername)}\n'
+      final String body = 'User: ${_localStorageRepository?.getUserSessionData(Constants.sessionUsername)}\n'
           'OS version: $os ${deviceData['version.release']}\n'
           'Sdk version: ${deviceData['version.sdkInt'].toString()}\n'
           'Manufacturer: ${deviceData['manufacturer'] ?? 'unknown'}\n'
@@ -156,14 +141,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  Stream<SettingsState> _mapOnGiveFeedbackClickedToState(
-      OnGiveFeedbackClicked event) async* {
+  Stream<SettingsState> _mapOnGiveFeedbackClickedToState(OnGiveFeedbackClicked event) async* {
     yield GivingFeedbackState();
     try {
       final String os = Platform.isAndroid ? 'Android' : 'IOS';
 
-      final String body =
-          'User: ${_localStorageRepository?.getUserSessionData(Constants.sessionUsername)}\n'
+      final String body = 'User: ${_localStorageRepository?.getUserSessionData(Constants.sessionUsername)}\n'
           'OS: $os\n\n'
           'Details: ${event.body}\n';
 

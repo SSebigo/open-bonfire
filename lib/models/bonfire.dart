@@ -65,15 +65,15 @@ class TextBonfire extends Bonfire {
   }) : super(
           createdAt: createdAt as int,
           deleted: deleted as bool,
-          dislikes: dislikes as List<String>,
+          dislikes: dislikes.cast<String>() as List<String>,
           expired: expired as bool,
           expiresAt: expiresAt as int,
           id: id as String,
-          likes: likes as List<String>,
+          likes: likes.cast<String>() as List<String>,
           position: position as Position,
           authorUid: authorUid as String,
-          viewedBy: viewedBy as List<String>,
-          visibleBy: visibleBy as List<String>,
+          viewedBy: viewedBy.cast<String>() as List<String>,
+          visibleBy: visibleBy.cast<String>() as List<String>,
         );
 
   factory TextBonfire.fromFirestore(DocumentSnapshot document) {
@@ -87,10 +87,7 @@ class TextBonfire extends Bonfire {
       expiresAt: data['expiresAt'],
       id: data['id'],
       likes: data['likes'],
-      position: Position(
-        latitude: geoPoint.latitude,
-        longitude: geoPoint.longitude,
-      ),
+      position: Position(latitude: geoPoint.latitude, longitude: geoPoint.longitude),
       text: data['text'] as String,
       authorUid: data['authorUid'],
       viewedBy: data['viewedBy'],
@@ -108,9 +105,7 @@ class TextBonfire extends Bonfire {
     map['expiresAt'] = expiresAt;
     map['id'] = id;
     map['likes'] = likes;
-    map['position'] = Geoflutterfire()
-        .point(latitude: position.latitude, longitude: position.longitude)
-        .data;
+    map['position'] = Geoflutterfire().point(latitude: position.latitude, longitude: position.longitude).data;
     map['text'] = text;
     map['type'] = 0;
     map['authorUid'] = authorUid;
@@ -141,15 +136,15 @@ class ImageBonfire extends Bonfire {
   }) : super(
           createdAt: createdAt as int,
           deleted: deleted as bool,
-          dislikes: dislikes as List<String>,
+          dislikes: dislikes.cast<String>() as List<String>,
           expired: expired as bool,
           expiresAt: expiresAt as int,
           id: id as String,
-          likes: likes as List<String>,
+          likes: likes.cast<String>() as List<String>,
           position: position as Position,
           authorUid: authorUid as String,
-          viewedBy: viewedBy as List<String>,
-          visibleBy: visibleBy as List<String>,
+          viewedBy: viewedBy.cast<String>() as List<String>,
+          visibleBy: visibleBy.cast<String>() as List<String>,
         );
 
   factory ImageBonfire.fromFirestore(DocumentSnapshot document) {
@@ -165,10 +160,7 @@ class ImageBonfire extends Bonfire {
       id: data['id'],
       imageUrl: data['imageUrl'] as String,
       likes: data['likes'],
-      position: Position(
-        latitude: geoPoint.latitude,
-        longitude: geoPoint.longitude,
-      ),
+      position: Position(latitude: geoPoint.latitude, longitude: geoPoint.longitude),
       authorUid: data['authorUid'],
       viewedBy: data['viewedBy'],
       visibleBy: data['visibleBy'],
@@ -187,9 +179,7 @@ class ImageBonfire extends Bonfire {
     map['id'] = id;
     map['imageUrl'] = imageUrl;
     map['likes'] = likes;
-    map['position'] = Geoflutterfire()
-        .point(latitude: position.latitude, longitude: position.longitude)
-        .data;
+    map['position'] = Geoflutterfire().point(latitude: position.latitude, longitude: position.longitude).data;
     map['type'] = 1;
     map['authorUid'] = authorUid;
     map['viewedBy'] = viewedBy;
@@ -219,15 +209,15 @@ class VideoBonfire extends Bonfire {
   }) : super(
           createdAt: createdAt as int,
           deleted: deleted as bool,
-          dislikes: dislikes as List<String>,
+          dislikes: dislikes.cast<String>() as List<String>,
           expired: expired as bool,
           expiresAt: expiresAt as int,
           id: id as String,
-          likes: likes as List<String>,
+          likes: likes.cast<String>() as List<String>,
           position: position as Position,
           authorUid: authorUid as String,
-          viewedBy: viewedBy as List<String>,
-          visibleBy: visibleBy as List<String>,
+          viewedBy: viewedBy.cast<String>() as List<String>,
+          visibleBy: visibleBy.cast<String>() as List<String>,
         );
 
   factory VideoBonfire.fromFirestore(DocumentSnapshot document) {
@@ -242,10 +232,7 @@ class VideoBonfire extends Bonfire {
       expiresAt: data['expiresAt'],
       id: data['id'],
       likes: data['likes'],
-      position: Position(
-        latitude: geoPoint.latitude,
-        longitude: geoPoint.longitude,
-      ),
+      position: Position(latitude: geoPoint.latitude, longitude: geoPoint.longitude),
       authorUid: data['authorUid'],
       videoUrl: data['videoUrl'] as String,
       viewedBy: data['viewedBy'],
@@ -264,9 +251,7 @@ class VideoBonfire extends Bonfire {
     map['expiresAt'] = expiresAt;
     map['id'] = id;
     map['likes'] = likes;
-    map['position'] = Geoflutterfire()
-        .point(latitude: position.latitude, longitude: position.longitude)
-        .data;
+    map['position'] = Geoflutterfire().point(latitude: position.latitude, longitude: position.longitude).data;
     map['type'] = 2;
     map['authorUid'] = authorUid;
     map['videoUrl'] = videoUrl;
@@ -299,15 +284,15 @@ class FileBonfire extends Bonfire {
   }) : super(
           createdAt: createdAt as int,
           deleted: deleted as bool,
-          dislikes: dislikes as List<String>,
+          dislikes: dislikes.cast<String>() as List<String>,
           expired: expired as bool,
           expiresAt: expiresAt as int,
           id: id as String,
-          likes: likes as List<String>,
+          likes: likes.cast<String>() as List<String>,
           position: position as Position,
           authorUid: authorUid as String,
-          viewedBy: viewedBy as List<String>,
-          visibleBy: visibleBy as List<String>,
+          viewedBy: viewedBy.cast<String>() as List<String>,
+          visibleBy: visibleBy.cast<String>() as List<String>,
         );
 
   factory FileBonfire.fromFirestore(DocumentSnapshot document) {
@@ -324,10 +309,7 @@ class FileBonfire extends Bonfire {
       fileUrl: data['fileUrl'] as String,
       id: data['id'],
       likes: data['likes'],
-      position: Position(
-        latitude: geoPoint.latitude,
-        longitude: geoPoint.longitude,
-      ),
+      position: Position(latitude: geoPoint.latitude, longitude: geoPoint.longitude),
       authorUid: data['authorUid'],
       viewedBy: data['viewedBy'],
       visibleBy: data['visibleBy'],
@@ -347,9 +329,7 @@ class FileBonfire extends Bonfire {
     map['fileUrl'] = fileUrl;
     map['id'] = id;
     map['likes'] = likes;
-    map['position'] = Geoflutterfire()
-        .point(latitude: position.latitude, longitude: position.longitude)
-        .data;
+    map['position'] = Geoflutterfire().point(latitude: position.latitude, longitude: position.longitude).data;
     map['type'] = 3;
     map['authorUid'] = authorUid;
     map['viewedBy'] = viewedBy;

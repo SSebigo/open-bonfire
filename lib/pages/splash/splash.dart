@@ -1,5 +1,6 @@
 import 'package:bonfire/blocs/splash/bloc.dart';
 import 'package:bonfire/i18n.dart';
+import 'package:bonfire/pages/splash/splash_state_text.dart';
 import 'package:bonfire/routes.dart';
 import 'package:bonfire/utils/constants.dart';
 import 'package:flushbar/flushbar.dart';
@@ -14,140 +15,6 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  Widget _buildStateText(SplashState state) {
-    if (state is STEPermissionsRequestPending) {
-      return Text(
-        I18n.of(context).textPermissionRequest,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    if (state is STEPermissionsRequestDenied) {
-      return Text(
-        I18n.of(context).textPermissionDenied,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    if (state is STEInitializingDownloadManager) {
-      return Text(
-        '${I18n.of(context).textInitializing} ${I18n.of(context).textDownloadManager.toLowerCase()}.',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    if (state is STEDownloadManagerInitialized) {
-      return Text(
-        '${I18n.of(context).textDownloadManager} ${I18n.of(context).textSuccessInitialized.toLowerCase()}.',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    if (state is STEInitializingBackgroundTaskManager) {
-      return Text(
-        '${I18n.of(context).textInitializing} ${I18n.of(context).textTaskManager.toLowerCase()}.',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    if (state is STEBackgroundTaskManagerInitialized) {
-      return Text(
-        '${I18n.of(context).textTaskManager} ${I18n.of(context).textSuccessInitialized.toLowerCase()}.',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    if (state is STEInitializingLocale) {
-      return Text(
-        '${I18n.of(context).textInitializing} ${I18n.of(context).textTranslationManager.toLowerCase()}.',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    if (state is STELocaleInitialized) {
-      return Text(
-        '${I18n.of(context).textTranslationManager} ${I18n.of(context).textSuccessInitialized.toLowerCase()}.',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.varelaRound(
-          textStyle: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    // if (state is STEInitializingSkins) {
-    //   return Text(
-    //     'Initialisation du gestionnaire de skins.',
-    //     textAlign: TextAlign.center,
-    //     style: GoogleFonts.varelaRound(
-    //       textStyle: TextStyle(
-    //         color: Theme.of(context).accentColor,
-    //         fontSize: 16.0,
-    //         fontWeight: FontWeight.bold,
-    //       ),
-    //     ),
-    //   );
-    // }
-    // if (state is STESkinsInitialized) {
-    //   return Text(
-    //     'Gestionnaire de skins initialise avec succes.',
-    //     textAlign: TextAlign.center,
-    //     style: GoogleFonts.varelaRound(
-    //       textStyle: TextStyle(
-    //         color: Theme.of(context).accentColor,
-    //         fontSize: 16.0,
-    //         fontWeight: FontWeight.bold,
-    //       ),
-    //     ),
-    //   );
-    // }
-    return Container();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,22 +23,13 @@ class _SplashPageState extends State<SplashPage> {
           bloc: BlocProvider.of<SplashBloc>(context),
           listener: (BuildContext context, SplashState state) {
             if (state is STENavigationToAnonymousSignIn) {
-              sailor.navigate(
-                Constants.authAnonymousRoute,
-                navigationType: NavigationType.pushReplace,
-              );
+              sailor.navigate(Constants.authAnonymousRoute, navigationType: NavigationType.pushReplace);
             }
             if (state is STENavigationToMap) {
-              sailor.navigate(
-                Constants.mapRoute,
-                navigationType: NavigationType.pushReplace,
-              );
+              sailor.navigate(Constants.mapRoute, navigationType: NavigationType.pushReplace);
             }
             if (state is STENavigationToCompleteProfile) {
-              sailor.navigate(
-                Constants.completeProfileRoute,
-                navigationType: NavigationType.pushReplace,
-              );
+              sailor.navigate(Constants.completeProfileRoute, navigationType: NavigationType.pushReplace);
             }
             if (state is STESplashError) {
               Flushbar(
@@ -191,13 +49,7 @@ class _SplashPageState extends State<SplashPage> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      width: 250.0,
-                      height: 250.0,
-                      child: Image.asset('assets/img/logo.png'),
-                    ),
-                  ),
+                  Expanded(child: Container(width: 250.0, height: 250.0, child: Image.asset('assets/img/logo.png'))),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 25.0),
                     child: Container(
@@ -217,12 +69,8 @@ class _SplashPageState extends State<SplashPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20.0, right: 20.0, bottom: 75.0),
-                    child: Container(
-                      width: double.infinity,
-                      child: _buildStateText(state),
-                    ),
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 75.0),
+                    child: Container(width: double.infinity, child: SplashStateText(state: state)),
                   ),
                 ],
               );

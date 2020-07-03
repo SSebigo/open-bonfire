@@ -45,17 +45,7 @@ class STEInitializingDownloadManager extends SplashState {
   List<Object> get props => [];
 }
 
-class STEDownloadManagerInitialized extends SplashState {
-  @override
-  List<Object> get props => [];
-}
-
 class STEInitializingBackgroundTaskManager extends SplashState {
-  @override
-  List<Object> get props => [];
-}
-
-class STEBackgroundTaskManagerInitialized extends SplashState {
   @override
   List<Object> get props => [];
 }
@@ -75,17 +65,7 @@ class STEInitializingLocale extends SplashState {
   List<Object> get props => [];
 }
 
-class STELocaleInitialized extends SplashState {
-  @override
-  List<Object> get props => [];
-}
-
 class STEInitializingSkins extends SplashState {
-  @override
-  List<Object> get props => [];
-}
-
-class STESkinsInitialized extends SplashState {
   @override
   List<Object> get props => [];
 }

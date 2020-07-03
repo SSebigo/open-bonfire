@@ -18,22 +18,17 @@ import 'package:permission_handler/permission_handler.dart';
 import './bloc.dart';
 
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
-  final PermissionHandler _permissionHandler = PermissionHandler();
-
   final Logger logger = Logger();
 
-  final AuthenticationRepository _authenticationRepository =
-      AuthenticationRepository();
+  final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
   final UserDataRepository _userDataRepository = UserDataRepository();
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   final LocalSkinRepository _localSkinRepository = LocalSkinRepository();
   final OnlineSkinRepository _onlineSkinRepository = OnlineSkinRepository();
   final TrophyRepository _trophyRepository = TrophyRepository();
   final BackgroundTask _backgroundTask = BackgroundTask();
 
-  @override
-  SplashState get initialState => InitialSplashState();
+  SplashBloc() : super(InitialSplashState());
 
   @override
   Stream<SplashState> mapEventToState(
@@ -60,9 +55,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     if (event is EVTOnInitializeLocale) {
       yield* _mapOnInitializeLocaleToState();
     }
-    // if (event is EVTOnInitializeSkinsManager) {
-    //   yield* _mapOnInitializeSkinsManagerToState();
-    // }
     if (event is EVTOnAuthenticate) {
       yield* _mapOnAuthenticateToState();
     }
@@ -71,11 +63,10 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   Stream<SplashState> _mapOnResquestPermissionsToState() async* {
     yield STEPermissionsRequestPending();
     try {
-      final result = await _permissionHandler
-          .requestPermissions([PermissionGroup.location]);
-      if (result[PermissionGroup.location] == PermissionStatus.granted) {
+      final PermissionStatus status = await Permission.location.request();
+      if (status == PermissionStatus.granted) {
         add(EVTOnInitializeDownloadManager());
-      } else if (PermissionStatus.granted == result[PermissionGroup.location]) {
+      } else if (status == PermissionStatus.denied) {
         yield STEPermissionsRequestDenied();
       }
     } catch (error) {
@@ -87,7 +78,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     yield STEInitializingDownloadManager();
     try {
       await FlutterDownloader.initialize();
-      yield STEDownloadManagerInitialized();
       add(EVTOnInitializeBackgroundTaskManager());
     } catch (error) {
       yield STESplashError(error: error);
@@ -97,17 +87,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   Stream<SplashState> _mapOnInitializeBackgroundTaskManagerToState() async* {
     yield STEInitializingBackgroundTaskManager();
     try {
-      BackgroundFetch.configure(
-          BackgroundFetchConfig(
-            minimumFetchInterval: 15,
-            stopOnTerminate: false,
-            enableHeadless: false,
-            requiresBatteryNotLow: false,
-            requiresCharging: false,
-            requiresStorageNotLow: false,
-            requiresDeviceIdle: false,
-            requiredNetworkType: NetworkType.ANY,
-          ), (String taskId) async {
+      BackgroundFetch.configure(BackgroundFetchConfig(minimumFetchInterval: 15), (String taskId) async {
         // This is the fetch-event callback.
 
         // Use a switch statement to route task-handling.
@@ -120,7 +100,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         // Finish, providing received taskId.
         BackgroundFetch.finish(taskId);
       });
-      yield STEBackgroundTaskManagerInitialized();
       add(EVTOnInitializeLocale());
     } catch (error) {
       yield STESplashError(error: error);
@@ -130,11 +109,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   Stream<SplashState> _mapOnInitializeLocaleToState() async* {
     yield STEInitializingLocale();
     try {
-      final String _locale = _localStorageRepository
-          ?.getSessionConfigData(Constants.configLocale) as String;
+      final String _locale = _localStorageRepository?.getSessionConfigData(Constants.configLocale) as String;
 
       await Jiffy.locale(_locale);
-      yield STELocaleInitialized();
       add(EVTOnAuthenticate());
     } catch (error) {
       yield STESplashError(error: error);
@@ -147,28 +124,24 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       final isSignedIn = await _authenticationRepository?.isSignedIn();
       if (isSignedIn) {
         // update skin
-        final String skinUniqueName = _localStorageRepository
-            ?.getUserSessionData(Constants.sessionSkinUniqueName) as String;
+        final String skinUniqueName =
+            _localStorageRepository?.getUserSessionData(Constants.sessionSkinUniqueName) as String;
 
-        final Skin skinDetails =
-            await _onlineSkinRepository?.getSkinDetails(skinUniqueName);
+        final Skin skinDetails = await _onlineSkinRepository?.getSkinDetails(skinUniqueName);
 
         await _localSkinRepository?.updateSkin(skinDetails);
 
-        final bool isAnonymous = _localStorageRepository
-            ?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
+        final bool isAnonymous = _localStorageRepository?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
 
         if (isAnonymous) {
           yield STENavigationToMap();
         } else {
-          final bool isProfileComplete =
-              await _userDataRepository?.isProfileComplete();
+          final bool isProfileComplete = await _userDataRepository?.isProfileComplete();
           if (isProfileComplete) {
-            final List<Trophy> trophies =
-                await _trophyRepository?.getTrophies();
+            final List<Trophy> trophies = await _trophyRepository?.getTrophies();
 
-            final List<String> userTrophies = _localStorageRepository
-                ?.getUserSessionData(Constants.sessionTrophies) as List<String>;
+            final List<String> userTrophies =
+                _localStorageRepository?.getUserSessionData(Constants.sessionTrophies)?.cast<String>() as List<String>;
 
             final List<Trophy> missingTrophies = trophies.where((trophy) {
               if (userTrophies == null) {
@@ -179,8 +152,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
             }).toList();
 
             await Future.wait([
-              _localStorageRepository?.setTrophiesData(
-                  Constants.trophies, trophies),
+              _localStorageRepository?.setTrophiesData(Constants.trophies, trophies),
               _userDataRepository?.updateMissingTrophies(missingTrophies),
               _backgroundTask.updateDailyQuestOrPenalty(),
             ]);

@@ -17,21 +17,16 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   ThemeData _theme;
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return BlocBuilder<DarkModeBloc, DarkModeState>(
       builder: (context, state) {
         if (state is InitialDarkModeState) {
-          _theme = _localStorageRepository
-                  ?.getSessionConfigData(Constants.configDarkMode) as bool
+          _theme = _localStorageRepository?.getSessionConfigData(Constants.configDarkMode) as bool
               ? Themes.dark
               : Themes.light;
         }
@@ -51,9 +46,7 @@ class _AppState extends State<App> {
           home: SplashPage(),
           onGenerateRoute: sailor.generator(),
           navigatorKey: sailor.navigatorKey,
-          navigatorObservers: [
-            SailorLoggingObserver(),
-          ],
+          navigatorObservers: [SailorLoggingObserver()],
         );
       },
     );

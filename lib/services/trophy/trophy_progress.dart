@@ -4,8 +4,7 @@ import 'package:bonfire/repositories/user_data_repository.dart';
 import 'package:bonfire/utils/constants.dart';
 
 class TrophyProgress {
-  final LocalStorageRepository _localStorageRepository =
-      LocalStorageRepository();
+  final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
   final UserDataRepository _userDataRepository = UserDataRepository();
 
   Future<void> updateTrophyAllIron(
@@ -15,15 +14,12 @@ class TrophyProgress {
     int textBonfireCount,
     int videoBonfireCount,
   }) async {
-    final int total = fileBonfireCount +
-        imageBonfireCount +
-        textBonfireCount +
-        videoBonfireCount;
+    final int total = fileBonfireCount + imageBonfireCount + textBonfireCount + videoBonfireCount;
 
     if (total >= 10) {
       final List<Trophy> missingTrophies = List.from(_localStorageRepository
-              ?.getUserSessionData(Constants.sessionMissingTrophies)
-          as List<Trophy>);
+          ?.getUserSessionData(Constants.sessionMissingTrophies)
+          ?.cast<Trophy>() as List<Trophy>);
 
       missingTrophies.removeWhere((trophy) => trophy.id == trophyId);
 
@@ -41,15 +37,12 @@ class TrophyProgress {
     int textBonfireCount,
     int videoBonfireCount,
   }) async {
-    final int total = fileBonfireCount +
-        imageBonfireCount +
-        textBonfireCount +
-        videoBonfireCount;
+    final int total = fileBonfireCount + imageBonfireCount + textBonfireCount + videoBonfireCount;
 
     if (total >= 100) {
       final List<Trophy> missingTrophies = List.from(_localStorageRepository
-              ?.getUserSessionData(Constants.sessionMissingTrophies)
-          as List<Trophy>);
+          ?.getUserSessionData(Constants.sessionMissingTrophies)
+          ?.cast<Trophy>() as List<Trophy>);
 
       missingTrophies.removeWhere((trophy) => trophy.id == trophyId);
 
@@ -67,15 +60,12 @@ class TrophyProgress {
     int textBonfireCount,
     int videoBonfireCount,
   }) async {
-    final int total = fileBonfireCount +
-        imageBonfireCount +
-        textBonfireCount +
-        videoBonfireCount;
+    final int total = fileBonfireCount + imageBonfireCount + textBonfireCount + videoBonfireCount;
 
     if (total >= 1000) {
       final List<Trophy> missingTrophies = List.from(_localStorageRepository
-              ?.getUserSessionData(Constants.sessionMissingTrophies)
-          as List<Trophy>);
+          ?.getUserSessionData(Constants.sessionMissingTrophies)
+          ?.cast<Trophy>() as List<Trophy>);
 
       missingTrophies.removeWhere((trophy) => trophy.id == trophyId);
 
@@ -93,15 +83,12 @@ class TrophyProgress {
     int textBonfireCount,
     int videoBonfireCount,
   }) async {
-    final int total = fileBonfireCount +
-        imageBonfireCount +
-        textBonfireCount +
-        videoBonfireCount;
+    final int total = fileBonfireCount + imageBonfireCount + textBonfireCount + videoBonfireCount;
 
     if (total >= 100000) {
       final List<Trophy> missingTrophies = List.from(_localStorageRepository
-              ?.getUserSessionData(Constants.sessionMissingTrophies)
-          as List<Trophy>);
+          ?.getUserSessionData(Constants.sessionMissingTrophies)
+          ?.cast<Trophy>() as List<Trophy>);
 
       missingTrophies.removeWhere((trophy) => trophy.id == trophyId);
 
@@ -119,15 +106,12 @@ class TrophyProgress {
     int textBonfireCount,
     int videoBonfireCount,
   }) async {
-    final int total = fileBonfireCount +
-        imageBonfireCount +
-        textBonfireCount +
-        videoBonfireCount;
+    final int total = fileBonfireCount + imageBonfireCount + textBonfireCount + videoBonfireCount;
 
     if (total >= 1000000) {
       final List<Trophy> missingTrophies = List.from(_localStorageRepository
-              ?.getUserSessionData(Constants.sessionMissingTrophies)
-          as List<Trophy>);
+          ?.getUserSessionData(Constants.sessionMissingTrophies)
+          ?.cast<Trophy>() as List<Trophy>);
 
       missingTrophies.removeWhere((trophy) => trophy.id == trophyId);
 
@@ -145,15 +129,12 @@ class TrophyProgress {
     int textBonfireCount,
     int videoBonfireCount,
   }) async {
-    final int total = fileBonfireCount +
-        imageBonfireCount +
-        textBonfireCount +
-        videoBonfireCount;
+    final int total = fileBonfireCount + imageBonfireCount + textBonfireCount + videoBonfireCount;
 
     if (total >= 1000000000) {
       final List<Trophy> missingTrophies = List.from(_localStorageRepository
-              ?.getUserSessionData(Constants.sessionMissingTrophies)
-          as List<Trophy>);
+          ?.getUserSessionData(Constants.sessionMissingTrophies)
+          ?.cast<Trophy>() as List<Trophy>);
 
       missingTrophies.removeWhere((trophy) => trophy.id == trophyId);
 
