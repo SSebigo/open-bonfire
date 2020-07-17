@@ -1,5 +1,4 @@
-import 'package:bloc/bloc.dart';
-import 'package:bonfire/app.dart';
+import 'package:bonfire/production_app.dart';
 import 'package:bonfire/blocs/auth/auth_bloc.dart';
 import 'package:bonfire/blocs/bonfire/bonfire_bloc.dart';
 import 'package:bonfire/blocs/complete_profile/complete_profile_bloc.dart';
@@ -14,13 +13,10 @@ import 'package:bonfire/blocs/splash/splash_event.dart';
 import 'package:bonfire/pages/store/bloc/store_bloc.dart';
 import 'package:bonfire/repositories/local_storage_repository.dart';
 import 'package:bonfire/routes.dart';
-import 'package:bonfire/simple_bloc_observer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
-  Bloc.observer = SimpleBlocObserver();
-
   WidgetsFlutterBinding.ensureInitialized();
 
   final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
@@ -44,6 +40,6 @@ Future<void> main() async {
       BlocProvider<SettingsBloc>(create: (BuildContext context) => SettingsBloc()),
       BlocProvider<DarkModeBloc>(create: (BuildContext context) => DarkModeBloc())
     ],
-    child: App(),
+    child: ProductionApp(),
   ));
 }

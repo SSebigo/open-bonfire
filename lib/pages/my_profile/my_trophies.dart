@@ -35,7 +35,7 @@ class _MyTrophiesPageState extends State<MyTrophiesPage> {
   List<StaggeredTile> _generateStaggeredTiles() {
     final List<StaggeredTile> staggeredTiles = <StaggeredTile>[];
 
-    _trophies.forEach((item) {
+    _trophies?.forEach((item) {
       staggeredTiles.add(const StaggeredTile.count(1, 1));
     });
 
@@ -45,7 +45,7 @@ class _MyTrophiesPageState extends State<MyTrophiesPage> {
   List<Widget> _generateTiles() {
     final List<Widget> tiles = <Widget>[];
 
-    _trophies.forEach((trophy) {
+    _trophies?.forEach((trophy) {
       final bool completed = _sessionTrophies?.contains(trophy.id);
 
       tiles.add(

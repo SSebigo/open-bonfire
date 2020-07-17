@@ -42,6 +42,15 @@ class NavigationToLightBonfireTextState extends MapState {
 //   List<Object> get props => [];
 // }
 
+class FetchedInitialPositionState extends MapState {
+  final Position position;
+
+  const FetchedInitialPositionState({@required this.position});
+
+  @override
+  List<Object> get props => [position];
+}
+
 class FetchedPositionState extends MapState {
   final Position position;
 

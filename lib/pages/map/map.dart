@@ -1,7 +1,6 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -31,7 +30,6 @@ class _MapPageState extends State<MapPage> {
   final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
 
   final Map<String, Bonfire> _bonfiresMap = <String, Bonfire>{};
-  final Position _position = Position(latitude: 0, longitude: 0);
 
   final List<String> _bottomSheetImages = <String>[];
 
@@ -48,13 +46,15 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+
     _dailyQuest = _localStorageRepository?.getUserSessionData(Constants.sessionDailyQuest) as Map<String, dynamic>;
     _completed = _localStorageRepository?.getDailyQuestData(Constants.dailyQuestCompleted) as bool;
 
     _darkMode = _localStorageRepository?.getSessionConfigData(Constants.configDarkMode) as bool;
     _isAnonymous = _localStorageRepository?.getUserSessionData(Constants.sessionIsAnonymous) as bool;
 
-    _skinUniqueName = _localStorageRepository?.getUserSessionData(Constants.sessionSkinUniqueName) as String ?? 'base';
+    _skinUniqueName =
+        _localStorageRepository?.getUserSessionData(Constants.sessionSkinUniqueName) as String ?? 'default';
 
     _skin = _localStorageRepository?.getSkinData(Constants.skin) as Map<String, dynamic>;
 
@@ -66,12 +66,8 @@ class _MapPageState extends State<MapPage> {
       // _skin['arIconUrl],
     ]);
 
-    BlocProvider.of<MapBloc>(context).add(OnFetchBonfiresEvent());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    BlocProvider.of<MapBloc>(context).add(OnFetchInitialPositionEvent());
+    BlocProvider.of<MapBloc>(context).add(const OnFetchBonfiresEvent());
   }
 
   void _onMapCreated(MapboxMapController controller) {
@@ -278,17 +274,24 @@ class _MapPageState extends State<MapPage> {
           listeners: [
             BlocListener<MapBloc, MapState>(
               listener: (BuildContext context, MapState state) {
+                if (state is FetchedInitialPositionState) {
+                  _mapController.moveCamera(CameraUpdate.newLatLngZoom(
+                    LatLng(state.position.latitude, state.position.longitude),
+                    18.0,
+                  ));
+                }
                 if (state is FetchedPositionState) {
-                  BlocProvider.of<MapBloc>(context).add(OnFetchBonfiresEvent());
+                  _mapController.moveCamera(CameraUpdate.newLatLngZoom(
+                    LatLng(state.position.latitude, state.position.longitude),
+                    18.0,
+                  ));
+                  BlocProvider.of<MapBloc>(context).add(OnFetchBonfiresEvent(position: state.position));
                 }
                 if (state is FetchedBonfiresState) {
                   _createSymbols(state.bonfires);
                 }
                 if (state is NavigateToBonfireState) {
-                  sailor.navigate(
-                    Constants.bonfireRoute,
-                    args: BonfireArgs(state.bonfire),
-                  );
+                  sailor.navigate(Constants.bonfireRoute, args: BonfireArgs(state.bonfire));
                 }
                 if (state is NavigationToLightBonfireFileState) {
                   sailor(Constants.lightBonfireFileRoute);
@@ -308,21 +311,18 @@ class _MapPageState extends State<MapPage> {
           child: Stack(
             children: <Widget>[
               BlocBuilder<DarkModeBloc, DarkModeState>(
-                builder: (context, state) {
-                  if (state is InitialDarkModeState) {
+                builder: (context, dmState) {
+                  if (dmState is InitialDarkModeState) {
                     _darkMode = _localStorageRepository?.getSessionConfigData(Constants.configDarkMode) as bool;
                   }
-                  if (state is DarkModeChanged) {
-                    _darkMode = state.darkMode;
+                  if (dmState is DarkModeChanged) {
+                    _darkMode = dmState.darkMode;
                   }
                   return MapboxMap(
                     onMapCreated: _onMapCreated,
                     myLocationEnabled: true,
-                    styleString: _darkMode == true ? MapboxStyles.DARK : MapboxStyles.LIGHT,
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(_position.latitude, _position.longitude),
-                      zoom: 18.0,
-                    ),
+                    styleString: _darkMode ? MapboxStyles.DARK : MapboxStyles.LIGHT,
+                    initialCameraPosition: const CameraPosition(target: LatLng(0.0, 0.0)),
                   );
                 },
               ),

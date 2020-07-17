@@ -4,13 +4,13 @@ import 'package:bonfire/services/bonfire/firebase_bonfire_service.dart';
 import 'package:geolocator/geolocator.dart';
 
 class BonfireRepository {
+  factory BonfireRepository() => _singleton;
+
   final BaseBonfireService _bonfireService = FirebaseBonfireService();
 
   static final BonfireRepository _singleton = BonfireRepository._internal();
 
   BonfireRepository._internal();
-
-  factory BonfireRepository() => _singleton;
 
   Stream<List<Bonfire>> getBonfires(Position position, double radius) =>
       _bonfireService.getBonfires(position, radius);

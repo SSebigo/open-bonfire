@@ -24,6 +24,15 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   @override
   Stream<MapState> mapEventToState(MapEvent event) async* {
+    if (event is OnFetchInitialPositionEvent) {
+      final GeolocationStatus geolocationStatus = await Geolocator().checkGeolocationPermissionStatus();
+      if (geolocationStatus == GeolocationStatus.granted) {
+        final Position position =
+            await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+
+        yield FetchedInitialPositionState(position: position);
+      }
+    }
     if (event is OnFetchPositionEvent) {
       yield* _mapFetchPositionToState();
     }
@@ -58,8 +67,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Stream<MapState> _mapFetchBonfiresEventToState(OnFetchBonfiresEvent event) async* {
     yield FetchingBonfiresState();
     try {
-      final Position position =
-          await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      Position position;
+
+      if (event.position == null) {
+        final GeolocationStatus geolocationStatus = await Geolocator().checkGeolocationPermissionStatus();
+        if (geolocationStatus == GeolocationStatus.granted) {
+          position = await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+        }
+      } else {
+        position = event.position;
+      }
 
       _bonfireSubscription?.cancel();
       _bonfireSubscription = _bonfireRepository

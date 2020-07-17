@@ -19,11 +19,11 @@ class FirebaseUserDataService extends BaseUserDataService {
   final Firestore _firestore = Firestore.instance;
   final LocalStorageRepository _localStorageRepository = LocalStorageRepository();
 
+  factory FirebaseUserDataService() => _singleton;
+
   static final FirebaseUserDataService _singleton = FirebaseUserDataService._internal();
 
   FirebaseUserDataService._internal();
-
-  factory FirebaseUserDataService() => _singleton;
 
   @override
   Future<UserSession> saveDetailsFromAuth(FirebaseUser user) async {

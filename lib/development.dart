@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:bonfire/app.dart';
+import 'package:bonfire/development_app.dart';
 import 'package:bonfire/blocs/auth/auth_bloc.dart';
 import 'package:bonfire/blocs/bonfire/bonfire_bloc.dart';
 import 'package:bonfire/blocs/complete_profile/complete_profile_bloc.dart';
@@ -44,6 +44,6 @@ Future<void> main() async {
       BlocProvider<SettingsBloc>(create: (BuildContext context) => SettingsBloc()),
       BlocProvider<DarkModeBloc>(create: (BuildContext context) => DarkModeBloc())
     ],
-    child: App(),
+    child: DevelopmentApp(),
   ));
 }

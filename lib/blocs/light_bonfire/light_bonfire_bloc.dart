@@ -53,41 +53,45 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
   Stream<LightBonfireState> _mapOnLightBonfireFileToState(OnLightBonfireFileClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position =
-          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String url =
-          await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
-      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
+      final GeolocationStatus geolocationStatus = await Geolocator().checkGeolocationPermissionStatus();
+      if (geolocationStatus == GeolocationStatus.granted) {
+        final Position position =
+            await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 
-      final Bonfire bonfire = FileBonfire(
-        fileUrl: url,
-        fileName: event.fileName,
-        description: event.description.trim(),
-        id: '',
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
-        expired: false,
-        authorUid: sessionUid,
-        position: position,
-        likes: <String>[],
-        dislikes: <String>[],
-        deleted: false,
-        visibleBy: event.visibleBy,
-        viewedBy: <String>[],
-      );
+        final String url =
+            await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
+        final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
 
-      yield BonfireLit();
+        final Bonfire bonfire = FileBonfire(
+          fileUrl: url,
+          fileName: event.fileName,
+          description: event.description.trim(),
+          id: '',
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
+          expired: false,
+          authorUid: sessionUid,
+          position: position,
+          likes: <String>[],
+          dislikes: <String>[],
+          deleted: false,
+          visibleBy: event.visibleBy,
+          viewedBy: <String>[],
+        );
 
-      // NOTE: update bonfire count for general count and file bonfire count
-      await Future.wait([
-        _bonfireRepository?.lightBonfire(bonfire),
-        _userDataRepository?.updateBonfireCount(),
-        _userDataRepository?.updateFileBonfireCount(),
-      ]);
+        yield BonfireLit();
 
-      yield* _updateUserExperienceAndLevel();
+        // NOTE: update bonfire count for general count and file bonfire count
+        await Future.wait([
+          _bonfireRepository?.lightBonfire(bonfire),
+          _userDataRepository?.updateBonfireCount(),
+          _userDataRepository?.updateFileBonfireCount(),
+        ]);
 
-      await _trophyRepository?.updateTrophyProgress();
+        yield* _updateUserExperienceAndLevel();
+
+        await _trophyRepository?.updateTrophyProgress();
+      }
     } catch (error) {
       yield LightBonfireError(error: error);
     }
@@ -96,38 +100,41 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
   Stream<LightBonfireState> _mapOnLightBonfireImageToState(OnLightBonfireImageClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position =
-          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String url =
-          await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
-      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
+      final GeolocationStatus geolocationStatus = await Geolocator().checkGeolocationPermissionStatus();
+      if (geolocationStatus == GeolocationStatus.granted) {
+        final Position position =
+            await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+        final String url =
+            await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
+        final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
 
-      final Bonfire bonfire = ImageBonfire(
-        imageUrl: url,
-        description: event.description.trim(),
-        id: '',
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
-        expired: false,
-        authorUid: sessionUid,
-        position: position,
-        likes: <String>[],
-        dislikes: <String>[],
-        deleted: false,
-        visibleBy: event.visibleBy,
-        viewedBy: <String>[],
-      );
+        final Bonfire bonfire = ImageBonfire(
+          imageUrl: url,
+          description: event.description.trim(),
+          id: '',
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
+          expired: false,
+          authorUid: sessionUid,
+          position: position,
+          likes: <String>[],
+          dislikes: <String>[],
+          deleted: false,
+          visibleBy: event.visibleBy,
+          viewedBy: <String>[],
+        );
 
-      yield BonfireLit();
+        yield BonfireLit();
 
-      // NOTE: update bonfire count for general count and image bonfire count
-      await Future.wait([
-        _bonfireRepository?.lightBonfire(bonfire),
-        _userDataRepository?.updateBonfireCount(),
-        _userDataRepository?.updateImageBonfireCount(),
-      ]);
+        // NOTE: update bonfire count for general count and image bonfire count
+        await Future.wait([
+          _bonfireRepository?.lightBonfire(bonfire),
+          _userDataRepository?.updateBonfireCount(),
+          _userDataRepository?.updateImageBonfireCount(),
+        ]);
 
-      yield* _updateUserExperienceAndLevel();
+        yield* _updateUserExperienceAndLevel();
+      }
     } catch (error) {
       yield LightBonfireError(error: error);
     }
@@ -136,36 +143,39 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
   Stream<LightBonfireState> _mapOnLightBonfireTextToState(OnLightBonfireTextClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position =
-          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
-      final Bonfire bonfire = TextBonfire(
-        text: event.text.trim(),
-        id: '',
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
-        expired: false,
-        authorUid: sessionUid,
-        position: position,
-        likes: <String>[],
-        dislikes: <String>[],
-        deleted: false,
-        visibleBy: event.visibleBy,
-        viewedBy: <String>[],
-      );
+      final GeolocationStatus geolocationStatus = await Geolocator().checkGeolocationPermissionStatus();
+      if (geolocationStatus == GeolocationStatus.granted) {
+        final Position position =
+            await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+        final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
+        final Bonfire bonfire = TextBonfire(
+          text: event.text.trim(),
+          id: '',
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
+          expired: false,
+          authorUid: sessionUid,
+          position: position,
+          likes: <String>[],
+          dislikes: <String>[],
+          deleted: false,
+          visibleBy: event.visibleBy,
+          viewedBy: <String>[],
+        );
 
-      yield BonfireLit();
+        yield BonfireLit();
 
-      // NOTE: update bonfire count for general count and text bonfire count
-      await Future.wait([
-        _bonfireRepository?.lightBonfire(bonfire),
-        _userDataRepository?.updateBonfireCount(),
-        _userDataRepository?.updateTextBonfireCount(),
-      ]);
+        // NOTE: update bonfire count for general count and text bonfire count
+        await Future.wait([
+          _bonfireRepository?.lightBonfire(bonfire),
+          _userDataRepository?.updateBonfireCount(),
+          _userDataRepository?.updateTextBonfireCount(),
+        ]);
 
-      yield* _updateUserExperienceAndLevel();
+        yield* _updateUserExperienceAndLevel();
 
-      await _trophyRepository?.updateTrophyProgress();
+        await _trophyRepository?.updateTrophyProgress();
+      }
     } catch (error) {
       yield LightBonfireError(error: error);
     }
@@ -174,37 +184,40 @@ class LightBonfireBloc extends Bloc<LightBonfireEvent, LightBonfireState> {
   Stream<LightBonfireState> _mapOnLightBonfireVideoToState(OnLightBonfireVideoClicked event) async* {
     yield LightingBonfire();
     try {
-      final Position position =
-          await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-      final String url =
-          await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
-      final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
-      final Bonfire bonfire = VideoBonfire(
-        videoUrl: url,
-        description: event.description.trim(),
-        id: '',
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
-        expired: false,
-        authorUid: sessionUid,
-        position: position,
-        likes: <String>[],
-        dislikes: <String>[],
-        deleted: false,
-        visibleBy: event.visibleBy,
-        viewedBy: <String>[],
-      );
+      final GeolocationStatus geolocationStatus = await Geolocator().checkGeolocationPermissionStatus();
+      if (geolocationStatus == GeolocationStatus.granted) {
+        final Position position =
+            await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+        final String url =
+            await _onlineStorageRepository?.uploadFile(event.file, Paths.getAttachmentsPathByFileType(event.fileType));
+        final String sessionUid = _localStorageRepository?.getUserSessionData(Constants.sessionUid) as String;
+        final Bonfire bonfire = VideoBonfire(
+          videoUrl: url,
+          description: event.description.trim(),
+          id: '',
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          expiresAt: (DateTime.now() + 1.days).millisecondsSinceEpoch,
+          expired: false,
+          authorUid: sessionUid,
+          position: position,
+          likes: <String>[],
+          dislikes: <String>[],
+          deleted: false,
+          visibleBy: event.visibleBy,
+          viewedBy: <String>[],
+        );
 
-      yield BonfireLit();
+        yield BonfireLit();
 
-      // NOTE: update bonfire count for general count and video bonfire count
-      await Future.wait([
-        _bonfireRepository?.lightBonfire(bonfire),
-        _userDataRepository?.updateBonfireCount(),
-        _userDataRepository?.updateVideoBonfireCount(),
-      ]);
+        // NOTE: update bonfire count for general count and video bonfire count
+        await Future.wait([
+          _bonfireRepository?.lightBonfire(bonfire),
+          _userDataRepository?.updateBonfireCount(),
+          _userDataRepository?.updateVideoBonfireCount(),
+        ]);
 
-      yield* _updateUserExperienceAndLevel();
+        yield* _updateUserExperienceAndLevel();
+      }
     } catch (error) {
       yield LightBonfireError(error: error);
     }

@@ -1,10 +1,16 @@
-import 'package:bonfire/models/bonfire.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'package:bonfire/models/bonfire.dart';
+
 abstract class MapEvent extends Equatable {
   const MapEvent();
+}
+
+class OnFetchInitialPositionEvent extends MapEvent {
+  @override
+  List<Object> get props => [];
 }
 
 class OnFetchPositionEvent extends MapEvent {
@@ -22,8 +28,12 @@ class OnReceivedPositionEvent extends MapEvent {
 }
 
 class OnFetchBonfiresEvent extends MapEvent {
+  final Position position;
+
+  const OnFetchBonfiresEvent({this.position});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [position];
 }
 
 class OnReceivedBonfiresEvent extends MapEvent {
